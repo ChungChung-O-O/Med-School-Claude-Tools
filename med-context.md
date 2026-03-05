@@ -145,6 +145,12 @@ Whenever a new skill is added or an existing skill is meaningfully changed:
 
 3. **Install any new dependencies immediately** via `pip3 install <package>` and mark them as INSTALLED in `Skills_Reference.txt`.
 
+4. **Back up to GitHub** by running `sync.sh`:
+   ```bash
+   cd ~/Desktop/Medical\ School/Claude && ./sync.sh
+   ```
+   This copies all skills from `~/.claude/skills/`, commits with a timestamp, and pushes to the private repo at `github.com/ChungChung-O-O/med-school-claude-config`. Run this as the final step after every skill addition or change.
+
 ---
 
 ## 9. NotebookLM Integration Notes
