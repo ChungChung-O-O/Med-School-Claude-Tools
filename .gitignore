@@ -13,3 +13,7 @@ CaseReview/
 
 # macOS
 .DS_Store
+
+# Bot credentials — never commit
+secretary-bot/.env
+config/zotero_config.json

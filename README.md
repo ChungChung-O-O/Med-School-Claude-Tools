@@ -7,6 +7,7 @@ Private backup of Claude Code skills and configuration for medical school study 
 | Path | Description |
 |------|-------------|
 | `skills/` | All Claude Code skill definitions (SKILL.md files) |
+| `config/zotero_config.json` | Zotero API credentials — **gitignored, fill in locally** (see `zotero_config.json.example`) |
 | `Skills_Reference.txt` | Quick-reference cheat sheet for all skills |
 | `med-context.md` | Tagging schema and metadata conventions for all outputs |
 | `sync.sh` | One-command backup script |
@@ -21,7 +22,6 @@ Private backup of Claude Code skills and configuration for medical school study 
 | `lecture-to-notebooklm` | Lecture slides (PPTX/PDF/DOCX) → structured .md for NotebookLM |
 | `notebooklm-to-anki` | NotebookLM output → Anki deck (.apkg) |
 | `clinical-vignette-coach` | Socratic vignette tutor → gap analysis + session log |
-| `morning-briefing` | Daily briefing skill |
 
 ## Actual skill location
 

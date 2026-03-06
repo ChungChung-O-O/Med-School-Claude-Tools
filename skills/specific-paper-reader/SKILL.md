@@ -252,6 +252,56 @@ print(f"PDF saved: {outpath}")
 
 Run this script via Bash. After it succeeds, confirm the file path to the user. Do not reproduce the full summary as chat text — a one-paragraph teaser plus the file path is sufficient.
 
+### Step 7: Save to Zotero (Opt-In)
+
+After confirming the PDF, ask the user:
+
+> "Save this paper to your Zotero library? [y/N]"
+
+If yes:
+
+1. Read credentials from `~/Desktop/Medical School/Claude/config/zotero_config.json`. If the file has placeholder values (`YOUR_NUMERIC_USER_ID` / `YOUR_API_KEY`), tell the user to fill in their Zotero User ID and API key at that path and stop.
+
+2. POST the paper to Zotero using Python with metadata already extracted during this skill run:
+
+```python
+import json, requests, os
+
+config_path = os.path.expanduser("~/Desktop/Medical School/Claude/config/zotero_config.json")
+config = json.load(open(config_path))
+
+# Build creators list from authors extracted earlier
+# Use {"creatorType": "author", "name": "LastName, FirstName"} format
+creators = [
+    {"creatorType": "author", "name": "<AUTHOR NAME>"},
+    # repeat for each author
+]
+
+item = [{
+    "itemType": "journalArticle",
+    "title": "<FULL PAPER TITLE>",
+    "creators": creators,
+    "publicationTitle": "<JOURNAL>",
+    "date": "<YEAR>",
+    "DOI": "<DOI>",
+    "extra": "PMID: <PMID>"
+}]
+
+r = requests.post(
+    f"https://api.zotero.org/users/{config['user_id']}/items",
+    headers={"Zotero-API-Key": config["api_key"], "Content-Type": "application/json"},
+    json=item
+)
+if r.status_code in (200, 201):
+    print("Saved to Zotero.")
+else:
+    print(f"Zotero error {r.status_code}: {r.text}")
+```
+
+3. Confirm "Saved to Zotero library." or report the error.
+
+If the user says no, skip silently.
+
 ---
 
 ## Clinical Summary Structure

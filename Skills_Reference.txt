@@ -61,6 +61,8 @@ GOOD TO KNOW
   - Prioritizes papers with citations >= 20 or journal IF > 10
   - If nothing meets the bar, it tells you and picks the closest match
   - Does not fabricate citation counts or impact factors
+  - After saving the PDF, Claude asks: "Save to Zotero? [y/N]"
+    Say y to add the paper (title, authors, journal, DOI, PMID) to your Zotero library
 
 --------------------------------------------------------------------------------
 
@@ -99,6 +101,11 @@ WHAT YOU GET
     - Conclusions & practice implications
     - 5 clinical talking points
     - 3–5 related papers with relevance notes
+
+ZOTERO INTEGRATION (OPT-IN)
+  After saving the PDF, Claude asks: "Save to Zotero? [y/N]"
+  Say y to add the paper (title, authors, journal, DOI, PMID) to your Zotero library.
+  Credentials stored at: ~/Desktop/Medical School/Claude/config/zotero_config.json
 
 DIFFERENCE FROM HOT PAPER READER
   Hot Paper Reader = you give keywords, it FINDS the paper for you
@@ -391,7 +398,7 @@ NO DEPENDENCIES REQUIRED
 
 
 ================================================================================
-INSTALLED DEPENDENCIES (as of 2026-03-05)
+INSTALLED DEPENDENCIES (as of 2026-03-06)
 ================================================================================
 
   fpdf2           INSTALLED   (for PDF generation — hot-paper-reader, specific-paper-reader)
@@ -399,6 +406,7 @@ INSTALLED DEPENDENCIES (as of 2026-03-05)
   python-pptx     INSTALLED   (PPTX input for lecture-to-notebooklm)
   python-docx     INSTALLED   (Word .docx input for lecture-to-notebooklm)
   openai-whisper  INSTALLED   (.mp3 input for notebooklm-to-anki)
+  requests        INSTALLED   (Zotero API calls — hot-paper-reader, specific-paper-reader)
 
 ================================================================================
 OUTPUT FOLDER MAP
@@ -408,5 +416,6 @@ OUTPUT FOLDER MAP
   NotebookLM source files:    ~/Desktop/Medical School/Claude/NotebookLM/
   Anki decks:                 ~/Desktop/Medical School/Claude/Anki/
   Case review logs:           ~/Desktop/Medical School/Claude/CaseReview/
+  Zotero credentials:         ~/Desktop/Medical School/Claude/config/zotero_config.json
 
 ================================================================================
