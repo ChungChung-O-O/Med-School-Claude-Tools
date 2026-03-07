@@ -328,6 +328,38 @@ Over time, the `CaseReview/` folder will accumulate sessions. When starting a ne
 
 ---
 
+## Phase 6: Post-Session Actions (Optional)
+
+After saving the session log, offer the user two optional actions:
+
+### Option A: Add Key Learning Points to Anki
+
+If the user wants to add the 3 key learning points as Anki cards:
+1. Check Anki-Connect MCP availability (attempt `getDeckNames` or equivalent tool).
+2. If Anki is running:
+   - Create/use deck `Claude::CaseReview`
+   - Add one Basic card per learning point: Front = clinical question derived from the point, Back = the answer/takeaway, Extra = case context (topic + date)
+   - Tag each card: `CaseReview`, relevant organ system (e.g., `Cardiology`), exam level (e.g., `Step2`)
+   - Confirm to user: "X cards added directly to Anki under Claude::CaseReview."
+3. If Anki is not running: tell user to open Anki and ask again, or offer to include cards in the session log for manual entry later.
+
+### Option B: Schedule a Review Session in Apple Calendar
+
+If the user wants to schedule a follow-up review:
+1. Ask: "When should I schedule your review? (e.g., 'tomorrow at 6pm', 'in 3 days')"
+2. Use the `apple-calendar` MCP to create a calendar event:
+   - Title: `Review: <TopicSlug> Case`
+   - Notes: Key learning points from this session (brief)
+   - Reminder: 15 minutes before
+3. Confirm event created with date/time.
+
+**Prompt the user with:**
+> "Session saved. Want me to: (A) add the 3 key learning points to Anki, (B) schedule a review session in your calendar, (C) both, or (D) skip?"
+
+Proceed based on their answer.
+
+---
+
 ## What This Skill Does NOT Do
 
 - Does not replace a question bank. Use it alongside UWorld/Amboss, not instead.

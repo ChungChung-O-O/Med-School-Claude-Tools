@@ -166,7 +166,26 @@ Example final tags for a card: `["Cardiology", "FirstAid::Cardiology", "HighYiel
 
 ---
 
-## Step 5: Generate the .apkg via Python
+## Step 5: Deliver Cards — Anki-Connect or .apkg Fallback
+
+**First, check if Anki is open.** Attempt to use the `anki` MCP tool to list deck names as a connectivity test.
+
+- **If successful (Anki is running with AnkiConnect):** Use Path A — add cards directly. No file needed.
+- **If failed (connection refused, Anki not open):** Use Path B — generate .apkg for manual import.
+
+### Path A: Direct Import via Anki-Connect MCP (preferred)
+
+1. Create the deck if it doesn't exist: use the `anki` MCP `createDeck` tool with name `Claude::<TopicSlug>_<TODAY>`.
+2. Add all cards in batch using the `anki` MCP `addNotes` tool.
+   - For Basic cards: model = `"Claude Medical Basic"`, fields: Front, Back, Extra, tags as generated
+   - For Cloze cards: model = `"Claude Medical Cloze"`, fields: Text, Extra, tags as generated
+3. Confirm to the user:
+   - Cards added directly to Anki — no import step required
+   - Deck name, total count (X basic + Y cloze), tag summary
+
+Skip Path B entirely if Path A succeeds.
+
+### Path B: Generate the .apkg via Python (fallback — Anki not running)
 
 After generating all card data, write and execute the following Python script. Fill in all card data directly into the script — do not write a separate JSON file.
 

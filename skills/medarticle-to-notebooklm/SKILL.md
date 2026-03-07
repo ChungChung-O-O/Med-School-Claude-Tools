@@ -44,8 +44,8 @@ Determine what was provided:
 | Input | Action |
 |-------|--------|
 | PMID | Subagent → PubMed MCP: `get_article_metadata`, then `get_full_text_article` if PMCID available |
-| URL (paper/journal) | WebFetch to extract title, abstract, methods, results, conclusions |
-| URL (UpToDate) | WebFetch — extract clinical content sections |
+| URL (paper/journal) | Use `fetch` MCP tool (preferred) for richer HTML-to-markdown extraction. Fall back to WebFetch if fetch MCP is unavailable. |
+| URL (UpToDate) | Use `fetch` MCP tool (preferred). Fall back to WebFetch if unavailable. |
 | Local PDF | Read tool — supports PDFs up to ~50 pages; use `pages` param for large files |
 | Pasted text / transcript | Read directly from user message |
 
