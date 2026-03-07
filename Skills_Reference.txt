@@ -1,11 +1,14 @@
 ================================================================================
-  CLAUDE CODE SKILLS — QUICK REFERENCE
+  CLAUDE CODE SKILLS — MED SCHOOL QUICK REFERENCE
   Location of skills: ~/.claude/skills/
-  Last updated: 2026-03-05 (added lecture-to-notebooklm)
+  Last updated: 2026-03-07 (added 5 MCPs; updated 5 skills to use Fetch, Anki-Connect, Calendar)
 ================================================================================
 
-This file is your cheat sheet. When you forget how to use a skill, open this.
-Update it whenever a new skill is added or an existing one changes.
+This file is your cheat sheet for medical school skills only.
+For daily life tools (morning briefing, Telegram secretary bot), see:
+  ~/Desktop/Medical School/Claude_Daily/README.txt
+
+Update this file whenever a med school skill is added or changed.
 
 --------------------------------------------------------------------------------
 SKILL OVERVIEW (what you have right now)
@@ -19,8 +22,9 @@ SKILL OVERVIEW (what you have right now)
   5. notebooklm-to-anki        — NotebookLM output → Anki deck (.apkg)
   6. clinical-vignette-coach   — Socratic vignette tutor → gap analysis + session log
 
-  OTHER SKILLS (not documented here — see ~/.claude/skills/SKILLS_GUIDE.txt)
-  -  morning-briefing         — Daily market/finance briefing → MP3
+  DAILY TOOLS (in Claude_Daily — not documented here)
+  -  morning-briefing         — Daily market/finance briefing → MP3 (auto 8am)
+  -  daily-secretary          — Telegram secretary bot (schedule + calendar)
 
 --------------------------------------------------------------------------------
 
@@ -243,8 +247,13 @@ DEPENDENCIES
 WHAT IT DOES
   Reads any NotebookLM output, generates comprehensive Anki cards with
   context-detected card types (Cloze for mechanisms/pathways, Basic Q&A for
-  definitions/criteria/drug pairings), applies double-tagging, and outputs
-  a ready-to-import .apkg file.
+  definitions/criteria/drug pairings), applies double-tagging, and delivers
+  cards via Anki-Connect (if Anki is open) or a .apkg file (fallback).
+
+ANKI-CONNECT DIRECT IMPORT (NEW)
+  If Anki is open and the AnkiConnect add-on is running, cards are injected
+  directly into Anki — no file import needed. If Anki is closed, falls back
+  to .apkg generation as before.
 
 HOW TO TRIGGER
   "make anki cards from: <source>"
@@ -391,6 +400,15 @@ WHAT YOU GET
   On future sessions, Claude will check if you've done a similar case
   before and vary the Socratic angle accordingly.
 
+POST-SESSION ACTIONS (NEW — Phase 6)
+  After the gap analysis, Claude will ask:
+  "(A) add learning points to Anki, (B) schedule a calendar review, (C) both, (D) skip"
+
+  Option A — Anki: adds the 3 key learning points as Basic cards to Claude::CaseReview
+              (requires Anki open with AnkiConnect)
+  Option B — Calendar: creates an Apple Calendar event with a 15-min reminder
+              (requires apple-calendar MCP — will prompt for access on first use)
+
 NO DEPENDENCIES REQUIRED
   Fully chat-based. No Python scripts or external libraries needed.
 
@@ -398,15 +416,40 @@ NO DEPENDENCIES REQUIRED
 
 
 ================================================================================
-INSTALLED DEPENDENCIES (as of 2026-03-06)
+MCP SERVERS (installed 2026-03-07 — active in Claude_Daily project)
 ================================================================================
 
-  fpdf2           INSTALLED   (for PDF generation — hot-paper-reader, specific-paper-reader)
-  genanki         INSTALLED   (for .apkg generation — notebooklm-to-anki)
-  python-pptx     INSTALLED   (PPTX input for lecture-to-notebooklm)
-  python-docx     INSTALLED   (Word .docx input for lecture-to-notebooklm)
-  openai-whisper  INSTALLED   (.mp3 input for notebooklm-to-anki)
-  requests        INSTALLED   (Zotero API calls — hot-paper-reader, specific-paper-reader)
+  fetch           ACTIVE   python3 -m mcp_server_fetch
+                           Better HTML-to-markdown for URL inputs in paper skills.
+                           Used by: hot-paper-reader, specific-paper-reader, medarticle-to-notebooklm
+
+  anki            ACTIVE   npx @ankimcp/anki-mcp-server
+                           Direct card injection into Anki (no file import needed).
+                           REQUIRES: Anki open + AnkiConnect add-on running (port 8765)
+                           Used by: notebooklm-to-anki, clinical-vignette-coach
+
+  apple-calendar  ACTIVE   npx mcp-server-apple-events
+                           Create/read Apple Calendar events and Reminders.
+                           REQUIRES: grant Full Calendar Access to Terminal on first use.
+                           Used by: clinical-vignette-coach
+
+  sqlite          ACTIVE   npx mcp-server-sqlite-npx → Anki2/Austin/collection.anki2
+                           Direct query access to your Anki database.
+
+  github          ACTIVE   npx @modelcontextprotocol/server-github
+                           GitHub repo operations. PAT expires 2027-03-07.
+
+================================================================================
+INSTALLED DEPENDENCIES (as of 2026-03-07)
+================================================================================
+
+  fpdf2            INSTALLED   (for PDF generation — hot-paper-reader, specific-paper-reader)
+  genanki          INSTALLED   (for .apkg fallback — notebooklm-to-anki)
+  python-pptx      INSTALLED   (PPTX input for lecture-to-notebooklm)
+  python-docx      INSTALLED   (Word .docx input for lecture-to-notebooklm)
+  openai-whisper   INSTALLED   (.mp3 input for notebooklm-to-anki)
+  requests         INSTALLED   (Zotero API calls — hot-paper-reader, specific-paper-reader)
+  mcp-server-fetch INSTALLED   (via pip — Fetch MCP backend)
 
 ================================================================================
 OUTPUT FOLDER MAP
