@@ -1,12 +1,12 @@
 ================================================================================
   CLAUDE CODE SKILLS — MED SCHOOL QUICK REFERENCE
   Location of skills: ~/.claude/skills/
-  Last updated: 2026-03-07 (added 5 MCPs; updated 5 skills to use Fetch, Anki-Connect, Calendar)
+  Last updated: 2026-03-09 (added prompt-engineer skill)
 ================================================================================
 
 This file is your cheat sheet for medical school skills only.
 For daily life tools (morning briefing, Telegram secretary bot), see:
-  ~/Desktop/Medical School/Claude_Daily/README.txt
+  ~/Desktop/Medical School/Claude_Daily/README.md
 
 Update this file whenever a med school skill is added or changed.
 
@@ -22,9 +22,10 @@ SKILL OVERVIEW (what you have right now)
   5. notebooklm-to-anki        — NotebookLM output → Anki deck (.apkg)
   6. clinical-vignette-coach   — Socratic vignette tutor → gap analysis + session log
 
-  DAILY TOOLS (in Claude_Daily — not documented here)
+  DAILY TOOLS (in Claude_Daily — see README.md there for full docs)
   -  morning-briefing         — Daily market/finance briefing → MP3 (auto 8am)
   -  daily-secretary          — Telegram secretary bot (schedule + calendar)
+  -  prompt-engineer          — Review prompts/skills/system instructions for issues before use
 
 --------------------------------------------------------------------------------
 
