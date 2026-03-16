@@ -1,7 +1,7 @@
 ================================================================================
   CLAUDE CODE SKILLS — MED SCHOOL QUICK REFERENCE
   Location of skills: ~/.claude/skills/
-  Last updated: 2026-03-09 (added prompt-engineer skill)
+  Last updated: 2026-03-16 (added gstack cross-reference)
 ================================================================================
 
 This file is your cheat sheet for medical school skills only.
@@ -26,6 +26,10 @@ SKILL OVERVIEW (what you have right now)
   -  morning-briefing         — Daily market/finance briefing → MP3 (auto 8am)
   -  daily-secretary          — Telegram secretary bot (schedule + calendar)
   -  prompt-engineer          — Review prompts/skills/system instructions for issues before use
+  -  gstack (/review, /ship, /plan-eng-review)
+                              — Developer workflow skills for quant-trader + secretary-bot.
+                                NOT used in med school study pipeline.
+                                See Claude_Daily/README.md § 4 for full details.
 
 --------------------------------------------------------------------------------
 
