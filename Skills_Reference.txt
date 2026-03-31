@@ -1,7 +1,7 @@
 ================================================================================
   CLAUDE CODE SKILLS — MED SCHOOL QUICK REFERENCE
   Location of skills: ~/.claude/skills/
-  Last updated: 2026-03-16 (added gstack cross-reference)
+  Last updated: 2026-03-31 (added syllabus-to-calendar skill)
 ================================================================================
 
 This file is your cheat sheet for medical school skills only.
@@ -21,6 +21,7 @@ SKILL OVERVIEW (what you have right now)
   4. lecture-to-notebooklm     — Lecture slides (PPTX/PDF/DOCX) → structured .md for NotebookLM
   5. notebooklm-to-anki        — NotebookLM output → Anki deck (.apkg)
   6. clinical-vignette-coach   — Socratic vignette tutor → gap analysis + session log
+  7. syllabus-to-calendar      — Syllabus PDF/image/text → bulk Google Calendar events
 
   DAILY TOOLS (in Claude_Daily — see README.md there for full docs)
   -  morning-briefing         — Daily market/finance briefing → MP3 (auto 8am)
@@ -455,6 +456,53 @@ INSTALLED DEPENDENCIES (as of 2026-03-07)
   openai-whisper   INSTALLED   (.mp3 input for notebooklm-to-anki)
   requests         INSTALLED   (Zotero API calls — hot-paper-reader, specific-paper-reader)
   mcp-server-fetch INSTALLED   (via pip — Fetch MCP backend)
+
+================================================================================
+7. SYLLABUS TO CALENDAR
+================================================================================
+
+WHAT IT DOES
+  Parses a course syllabus (PDF, image, or pasted text) and bulk-creates
+  Google Calendar events for every lecture, lab, exam, deadline, and
+  orientation item found. Shows a preview table before creating anything.
+
+HOW TO TRIGGER
+  Type any of these in Claude Code:
+
+    /syllabus
+    syllabus: /path/to/syllabus.pdf
+    "parse my syllabus"
+    "import syllabus to calendar"
+
+  Accepts:
+    - PDF file path (Claude reads it directly)
+    - Image/screenshot path (Claude sees it)
+    - Pasted syllabus text
+
+WORKFLOW
+  1. Provide syllabus (file path or paste)
+  2. Claude extracts all events with date/time/title/type
+  3. Preview table shown — confirm or filter (e.g. "exams only")
+  4. Events created on your Google Calendar in bulk
+  5. Summary reported (X/Y events created)
+
+FILTER OPTIONS (say after preview)
+  "yes"                  — create all events
+  "exams only"           — create only exam-type events
+  "skip lectures"        — create everything except lectures
+  "just exams and deadlines" — create filtered subset
+
+NOTES
+  - Recurring weekly lectures are expanded into individual events (not recurrences)
+    so holiday exceptions are handled correctly
+  - All-day events are used for deadlines with no time given
+  - Default exam duration is 2 hours if end time is not given
+  - Requires Google Calendar MCP to be active (gcal_create_event)
+
+DESIGN DOC (Anki integration)
+  Claude_For_School/anki-integration-plan.md — algorithm for integrating
+  the MSUCOM upperclassman Anki deck when it arrives (unsuspend by block/
+  lecture, coverage tracking, bot commands). Build pending deck arrival.
 
 ================================================================================
 OUTPUT FOLDER MAP
