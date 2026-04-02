@@ -1,7 +1,6 @@
 ---
 name: notebooklm-to-anki
-description: Use this skill when the user wants to generate Anki flashcards from any NotebookLM output — including .txt study guides, .pdf exports, .mp3 audio overviews, or pasted notes. Outputs a .apkg file ready to import into Anki under the "Claude" deck.
-version: 1.0.0
+description: Use this skill when the user wants to generate Anki flashcards from any NotebookLM output — including .txt study guides, .pdf exports, .mp3 audio overviews, or pasted notes. Outputs a .apkg file ready to import into Anki under the "Claude" deck. Trigger on phrases like "make anki cards from this", "anki:", "notebooklm to anki", "generate cards from", or whenever a user provides a .txt/.pdf/.mp3 file and wants flashcards from it.
 ---
 
 # NotebookLM to Anki
@@ -185,97 +184,51 @@ Example final tags for a card: `["Cardiology", "FirstAid::Cardiology", "HighYiel
 
 Skip Path B entirely if Path A succeeds.
 
-### Path B: Generate the .apkg via Python (fallback — Anki not running)
+### Path B: Generate the .apkg via bundled script (fallback — Anki not running)
 
-After generating all card data, write and execute the following Python script. Fill in all card data directly into the script — do not write a separate JSON file.
+After generating all card data, write a JSON file and run the bundled script. The model IDs are fixed constants in the script (Anki uses them to identify note types — never change them).
 
-**Fixed constants (never change these — Anki uses model IDs to identify note types):**
-- Basic model ID: `1607392319`
-- Cloze model ID: `1607392320`
+**Step 1: Write card data to `/tmp/anki_input.json`:**
 
-```python
-import genanki
-import hashlib
-from datetime import date
-
-# ── Fixed model definitions ────────────────────────────────────────────────────
-BASIC_MODEL = genanki.Model(
-    1607392319,
-    'Claude Medical Basic',
-    fields=[
-        {'name': 'Front'},
-        {'name': 'Back'},
-        {'name': 'Extra'},
-    ],
-    templates=[{
-        'name': 'Card 1',
-        'qfmt': '{{Front}}',
-        'afmt': '{{FrontSide}}<hr id=answer>{{Back}}<br><br><i style="color:#888">{{Extra}}</i>',
-    }],
-    css='.card { font-family: helvetica; font-size: 16px; text-align: left; color: black; background-color: white; } hr { border-top: 1px solid #ccc; }'
-)
-
-CLOZE_MODEL = genanki.Model(
-    1607392320,
-    'Claude Medical Cloze',
-    fields=[
-        {'name': 'Text'},
-        {'name': 'Extra'},
-    ],
-    templates=[{
-        'name': 'Cloze',
-        'qfmt': '{{cloze:Text}}',
-        'afmt': '{{cloze:Text}}<br><br><i style="color:#888">{{Extra}}</i>',
-    }],
-    model_type=genanki.Model.CLOZE,
-    css='.card { font-family: helvetica; font-size: 16px; text-align: left; color: black; background-color: white; } .cloze { font-weight: bold; color: #0066cc; }'
-)
-
-# ── Deck setup ─────────────────────────────────────────────────────────────────
-TOPIC_SLUG = "<TopicSlug>"   # e.g. "HeartFailure", "Sepsis", "ThyroidPharm"
-TODAY = date.today().strftime("%Y-%m-%d")
-DECK_NAME = f"Claude::{TOPIC_SLUG}_{TODAY}"
-
-deck_id = int(hashlib.md5(DECK_NAME.encode()).hexdigest(), 16) % (2**31)
-deck = genanki.Deck(deck_id, DECK_NAME)
-
-# ── Card data ──────────────────────────────────────────────────────────────────
-# Insert generated cards below. Each card added via deck.add_note(...)
-
-# Example basic card:
-# deck.add_note(genanki.Note(
-#     model=BASIC_MODEL,
-#     fields=["<Front>", "<Back>", "<Extra>"],
-#     tags=["<AutoTag>", "FirstAid::<Section>", "<YieldLevel>"]
-# ))
-
-# Example cloze card:
-# deck.add_note(genanki.Note(
-#     model=CLOZE_MODEL,
-#     fields=["<Text with {{c1::cloze}} syntax>", "<Extra>"],
-#     tags=["<AutoTag>", "FirstAid::<Section>", "<YieldLevel>"]
-# ))
-
-# [ALL GENERATED CARDS GO HERE]
-
-# ── Output ─────────────────────────────────────────────────────────────────────
-outpath = f"/Users/austin_cheng/Desktop/Medical School/Claude/Anki/Anki_{TOPIC_SLUG}_{TODAY}.apkg"
-genanki.Package(deck).write_to_file(outpath)
-print(f"Deck: {DECK_NAME}")
-print(f"Cards: {len(deck.notes)}")
-print(f"Saved: {outpath}")
+```json
+{
+  "topic_slug": "HeartFailure",
+  "output_path": "~/Desktop/Medical School/Claude/Anki/Anki_HeartFailure_YYYY-MM-DD.apkg",
+  "cards": [
+    {
+      "type": "basic",
+      "front": "Question text",
+      "back": "Answer text",
+      "extra": "Memory aid or context",
+      "tags": ["Cardiology", "FirstAid::Cardiology", "HighYield"]
+    },
+    {
+      "type": "cloze",
+      "text": "In HFrEF, {{c1::ACE inhibitors}} reduce afterload.",
+      "extra": "Memory aid",
+      "tags": ["Cardiology", "FirstAid::Cardiology", "HighYield"]
+    }
+  ]
+}
 ```
 
-Run via Bash. If the script fails:
-- Check for encoding issues in card text (escape any `"` inside strings as `\"`)
-- Verify cloze cards all contain at least one `{{c1::...}}` — genanki will reject cloze notes without a cloze deletion
-- Do not retry the same broken script — fix the specific error first
+**Step 2: Run the bundled script:**
+
+```bash
+python3 ~/.claude/skills/notebooklm-to-anki/scripts/generate_apkg.py /tmp/anki_input.json
+```
+
+If genanki is not installed, run `pip3 install genanki` first and retry.
+
+If the script fails:
+- Cloze cards must contain at least one `{{c1::...}}` — the script will warn and skip cards missing this
+- Check for unescaped quotes in card text fields
 
 ---
 
 ## Step 6: Confirm Output to User
 
-After the script succeeds, report:
+After the script succeeds, verify the output file exists and has a non-zero size before reporting. Then report:
 - Deck name (e.g., `Claude::HeartFailure_2026-03-05`)
 - Total card count, broken down: X basic + Y cloze
 - File path

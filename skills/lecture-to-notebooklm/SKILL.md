@@ -1,7 +1,6 @@
 ---
 name: lecture-to-notebooklm
-description: Use this skill when the user wants to process lecture slides (PPTX, PDF, or Word .docx) into a structured NotebookLM-ready document. Applies either a Step 1 schema (Physiology → Pathology → Pharmacology → Clinical Correlation) or Step 2 schema (Presentation → Workup → Management → Complications) with bolded high-yield terms. Outputs a .md file optimized for NotebookLM upload.
-version: 1.0.0
+description: Use this skill when the user wants to process lecture slides (PPTX, PDF, or Word .docx) into a structured NotebookLM-ready document. Applies either a Step 1 schema (Physiology → Pathology → Pharmacology → Clinical Correlation) or Step 2 schema (Presentation → Workup → Management → Complications) with bolded high-yield terms. Outputs a .md file optimized for NotebookLM upload. Trigger when the user provides a slide file (pptx, pdf, docx) and wants it structured for NotebookLM, or says "lecture:", "slides:", "process lecture:", "prep slides:", or "lecture to notebooklm".
 ---
 
 # Lecture to NotebookLM
@@ -252,13 +251,13 @@ Filename format:
 
 `<TopicSlug>` = 2-3 word topic in snake_case (e.g., `cardiac_physiology`, `heart_failure`, `beta_blockers`).
 
-Write the file using the Write tool. After saving, confirm to the user:
-- File path
+Write the file using the Write tool. After saving, read back the first 5 lines to confirm the file was written correctly (non-empty, correct schema header). Then confirm to the user:
+- File path and size (word count or approximate)
 - Schema used and why (one sentence)
 - Slide count processed (if PPTX)
 - Any gaps (slides with no extractable text, images-only slides, etc.)
 
-Do NOT reproduce the full structured output in chat. A brief confirmation is sufficient.
+Do not reproduce the full structured output in chat. A brief confirmation is sufficient.
 
 ---
 

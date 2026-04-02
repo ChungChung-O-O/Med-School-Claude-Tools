@@ -1,7 +1,7 @@
 ================================================================================
   CLAUDE CODE SKILLS — MED SCHOOL QUICK REFERENCE
   Location of skills: ~/.claude/skills/
-  Last updated: 2026-03-31 (added syllabus-to-calendar skill)
+  Last updated: 2026-04-02 (skill quality improvements: bundled PDF/apkg scripts, pushier descriptions, output verification)
 ================================================================================
 
 This file is your cheat sheet for medical school skills only.

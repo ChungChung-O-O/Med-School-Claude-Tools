@@ -1,7 +1,6 @@
 ---
 name: medarticle-to-notebooklm
-description: Use this skill when the user wants to prepare research articles, UpToDate exports, or review articles for NotebookLM upload — including PubMed articles (via PMID or URL), journal PDFs, and UpToDate pages. Outputs a clean, structured .txt file optimized for NotebookLM ingestion. Do NOT use for lecture slides or PPTX files — use lecture-to-notebooklm for those.
-version: 1.0.0
+description: Use this skill when the user wants to prepare research articles, UpToDate exports, or review articles for NotebookLM upload — including PubMed articles (via PMID or URL), journal PDFs, and UpToDate pages. Outputs a clean, structured .txt file optimized for NotebookLM ingestion. Trigger when the user says "prepare for notebooklm:", "notebooklm:", "structure this for notebooklm:", "ingest this for notebooklm:", or provides a PMID/URL/PDF and wants it structured for NotebookLM. Do NOT use for lecture slides or PPTX files — use lecture-to-notebooklm for those.
 ---
 
 # MedArticle to NotebookLM
@@ -239,13 +238,13 @@ Filename format:
 
 `<TopicSlug>` = 2-3 word topic in snake_case (e.g., `heart_failure`, `septic_shock`).
 
-Write the file using the Write tool. After saving, confirm to the user:
-- File path
+Write the file using the Write tool. After saving, read back the first 5 lines to confirm the file was written correctly (non-empty, correct schema header). Then confirm to the user:
+- File path and approximate size
 - Schema used (PICO or Clinical) and why
 - 2-3 sentence summary of what was captured
 - Any gaps (e.g., full text unavailable, transcript was partial)
 
-Do NOT reproduce the full structured output in chat. A brief confirmation is sufficient.
+Do not reproduce the full structured output in chat. A brief confirmation is sufficient.
 
 ---
 
