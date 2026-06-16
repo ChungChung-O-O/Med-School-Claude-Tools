@@ -242,7 +242,7 @@ Bold all high-yield terms, drug names, mechanisms, eponyms, lab values, and test
 
 Save to:
 ```
-/Users/austin_cheng/Desktop/Medical School/Claude/NotebookLM/
+/Users/austin_cheng/Desktop/Claude Code/Claude/NotebookLM/
 ```
 
 Filename format:

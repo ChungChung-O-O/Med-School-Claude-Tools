@@ -229,7 +229,7 @@ These help NotebookLM link this source to related topics in other notebooks.]
 
 Save as a `.txt` file to:
 ```
-/Users/austin_cheng/Desktop/Medical School/Claude/NotebookLM/
+/Users/austin_cheng/Desktop/Claude Code/Claude/NotebookLM/
 ```
 
 Filename format:

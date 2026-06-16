@@ -6,7 +6,7 @@
 
 This file is your cheat sheet for medical school skills only.
 For daily life tools (morning briefing, Telegram secretary bot), see:
-  ~/Desktop/Medical School/Claude_Daily/README.md
+  ~/Desktop/Claude Code/Claude_Daily/README.md
 
 Update this file whenever a med school skill is added or changed.
 
@@ -115,7 +115,7 @@ WHAT YOU GET
 ZOTERO INTEGRATION (OPT-IN)
   After saving the PDF, Claude asks: "Save to Zotero? [y/N]"
   Say y to add the paper (title, authors, journal, DOI, PMID) to your Zotero library.
-  Credentials stored at: ~/Desktop/Medical School/Claude/config/zotero_config.json
+  Credentials stored at: ~/Desktop/Claude Code/Claude/config/zotero_config.json
 
 DIFFERENCE FROM HOT PAPER READER
   Hot Paper Reader = you give keywords, it FINDS the paper for you
@@ -165,7 +165,7 @@ AUTO-DETECTED SCHEMAS
 
 WHAT YOU GET
   .txt file saved to:
-    ~/Desktop/Medical School/Claude/NotebookLM/
+    ~/Desktop/Claude Code/Claude/NotebookLM/
 
   Naming:
     Research article:  NLM_PICO_<AuthorLastName>_<Year>_<Date>.txt
@@ -219,7 +219,7 @@ SCHEMA AUTO-DETECTION
 
 WHAT YOU GET
   .md file saved to:
-    ~/Desktop/Medical School/Claude/NotebookLM/
+    ~/Desktop/Claude Code/Claude/NotebookLM/
 
   Naming:
     Step 1 lecture:  NLM_Lec_Step1_<topic_slug>_<Date>.md
@@ -299,7 +299,7 @@ TAGGING SYSTEM (every card gets 3 tags)
 
 WHAT YOU GET
   .apkg file saved to:
-    ~/Desktop/Medical School/Claude/Anki/
+    ~/Desktop/Claude Code/Claude/Anki/
 
   Naming:   Anki_<TopicSlug>_<Date>.apkg
   Deck name in Anki: Claude::<TopicSlug>_<Date>
@@ -397,7 +397,7 @@ CONTRADICTION HANDLING (strict — no hallucination)
 WHAT YOU GET
   Chat-based gap analysis (in-session)
   Session log saved to:
-    ~/Desktop/Medical School/Claude/CaseReview/
+    ~/Desktop/Claude Code/Claude/CaseReview/
   Naming: CaseReview_<TopicSlug>_<Date>.md
 
   Log contains: vignette, your reasoning, full Socratic exchange,
@@ -509,9 +509,9 @@ OUTPUT FOLDER MAP
 ================================================================================
 
   PDFs (paper summaries):     ~/Desktop/
-  NotebookLM source files:    ~/Desktop/Medical School/Claude/NotebookLM/
-  Anki decks:                 ~/Desktop/Medical School/Claude/Anki/
-  Case review logs:           ~/Desktop/Medical School/Claude/CaseReview/
-  Zotero credentials:         ~/Desktop/Medical School/Claude/config/zotero_config.json
+  NotebookLM source files:    ~/Desktop/Claude Code/Claude/NotebookLM/
+  Anki decks:                 ~/Desktop/Claude Code/Claude/Anki/
+  Case review logs:           ~/Desktop/Claude Code/Claude/CaseReview/
+  Zotero credentials:         ~/Desktop/Claude Code/Claude/config/zotero_config.json
 
 ================================================================================

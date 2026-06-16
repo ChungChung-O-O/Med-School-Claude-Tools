@@ -193,7 +193,7 @@ After generating all card data, write a JSON file and run the bundled script. Th
 ```json
 {
   "topic_slug": "HeartFailure",
-  "output_path": "~/Desktop/Medical School/Claude/Anki/Anki_HeartFailure_YYYY-MM-DD.apkg",
+  "output_path": "~/Desktop/Claude Code/Claude/Anki/Anki_HeartFailure_YYYY-MM-DD.apkg",
   "cards": [
     {
       "type": "basic",

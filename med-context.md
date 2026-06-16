@@ -134,7 +134,7 @@ tags: [step2ck, classic-presentation, mechanism-ischemic, tricky]
 
 Whenever a new skill is added or an existing skill is meaningfully changed:
 
-1. **Update `Skills_Reference.txt`** at `~/Desktop/Medical School/Claude/Skills_Reference.txt`:
+1. **Update `Skills_Reference.txt`** at `~/Desktop/Claude Code/Claude/Skills_Reference.txt`:
    - Add the skill to the SKILL OVERVIEW numbered list
    - Add a full documentation section following the existing format
    - Update the INSTALLED DEPENDENCIES table if new packages were added
