@@ -201,7 +201,7 @@ guidelines say, and how this was resolved]
 
 After delivering the gap analysis, save a session log as a `.md` file:
 
-**Location:** `/Users/austin_cheng/Desktop/Claude Code/Claude/CaseReview/`
+**Location:** `/Users/austin_cheng/Desktop/Claude Code/Claude_For_School/CaseReview/`
 **Filename:** `CaseReview_<TopicSlug>_<YYYY-MM-DD>.md`
 
 If a file with the same topic slug already exists for the same date, append `_v2`, `_v3`, etc.

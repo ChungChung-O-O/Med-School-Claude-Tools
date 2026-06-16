@@ -229,7 +229,7 @@ These help NotebookLM link this source to related topics in other notebooks.]
 
 Save as a `.txt` file to:
 ```
-/Users/austin_cheng/Desktop/Claude Code/Claude/NotebookLM/
+/Users/austin_cheng/Desktop/Claude Code/Claude_For_School/NotebookLM/
 ```
 
 Filename format:
@@ -252,7 +252,7 @@ Do not reproduce the full structured output in chat. A brief confirmation is suf
 
 After confirming the file, always append this note to the user:
 
-> **To upload:** Open NotebookLM → your notebook → Sources → Upload → select the `.txt` file from `Medical School/Claude/NotebookLM/`.
+> **To upload:** Open NotebookLM → your notebook → Sources → Upload → select the `.txt` file from `Claude Code/Claude_For_School/NotebookLM/`.
 
 ---
 

@@ -242,7 +242,7 @@ Bold all high-yield terms, drug names, mechanisms, eponyms, lab values, and test
 
 Save to:
 ```
-/Users/austin_cheng/Desktop/Claude Code/Claude/NotebookLM/
+/Users/austin_cheng/Desktop/Claude Code/Claude_For_School/NotebookLM/
 ```
 
 Filename format:
@@ -265,7 +265,7 @@ Do not reproduce the full structured output in chat. A brief confirmation is suf
 
 After confirming the file, always append:
 
-> **To upload:** Open NotebookLM → your notebook → Sources → Upload → select the `.md` file from `Medical School/Claude/NotebookLM/`.
+> **To upload:** Open NotebookLM → your notebook → Sources → Upload → select the `.md` file from `Claude Code/Claude_For_School/NotebookLM/`.
 
 ---
 
