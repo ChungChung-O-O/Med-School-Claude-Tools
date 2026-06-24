@@ -71,7 +71,7 @@ class PaperPDF(FPDF):
         self.set_y(-15)
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(150, 150, 150)
-        self.cell(0, 10, f"Page {self.page_no()}  —  Generated {date.today()}  |  For clinical education purposes only", align="C")
+        self.cell(0, 10, f"Page {self.page_no()}  |  Generated {date.today()}  |  For clinical education purposes only", align="C")
 
 
 def section(pdf, title, body):
@@ -142,25 +142,31 @@ def generate(data: dict):
     pdf.set_xy(20, pdf.get_y() + 2)
     pdf.cell(0, 8, f"Study Design: {data['study_design']}  ·  Level of Evidence: {data['level_of_evidence']}  ·  Specialty: {data['specialty']}")
     pdf.ln(16)
+    pdf.set_x(18)
 
     # Clinical framing
     pdf.set_font("Helvetica", "I", 10)
     pdf.set_text_color(60, 60, 60)
-    pdf.multi_cell(0, 6, data["clinical_framing"])
+    pdf.set_x(18)
+    pdf.multi_cell(W, 6, data["clinical_framing"])
     pdf.ln(6)
 
     # Paper title
     pdf.set_font("Helvetica", "B", 13)
     pdf.set_text_color(20, 20, 20)
-    pdf.multi_cell(0, 7, data["title"])
+    pdf.set_x(18)
+    pdf.multi_cell(W, 7, data["title"])
     pdf.ln(3)
 
     # Authors / Journal / DOI
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(80, 80, 80)
-    pdf.multi_cell(0, 5, f"Authors: {data['authors_first']}, ..., {data['authors_last']}")
-    pdf.multi_cell(0, 5, f"Journal: {data['journal']}  |  Year: {data['year']}  |  DOI: {data['doi']}  |  PMID: {data['pmid']}")
-    pdf.multi_cell(0, 5, f"Impact: {data['citations']} citations  |  IF: {data['impact_factor']}  |  Funding: {data['funding']}")
+    pdf.set_x(18)
+    pdf.multi_cell(W, 5, f"Authors: {data['authors_first']}, ..., {data['authors_last']}")
+    pdf.set_x(18)
+    pdf.multi_cell(W, 5, f"Journal: {data['journal']}  |  Year: {data['year']}  |  DOI: {data['doi']}  |  PMID: {data['pmid']}")
+    pdf.set_x(18)
+    pdf.multi_cell(W, 5, f"Impact: {data['citations']} citations  |  IF: {data['impact_factor']}  |  Funding: {data['funding']}")
     pdf.ln(6)
 
     pdf.set_draw_color(200, 200, 200)
@@ -182,7 +188,8 @@ def generate(data: dict):
     pdf.set_font("Helvetica", "I", 8)
     pdf.set_text_color(130, 130, 130)
     sources = data.get("sources_note", "")
-    pdf.multi_cell(0, 5, f"Sources: {sources}\nThis summary is generated for educational purposes and does not constitute clinical advice.")
+    pdf.set_x(18)
+    pdf.multi_cell(W, 5, f"Sources: {sources}\nThis summary is generated for educational purposes and does not constitute clinical advice.")
 
     outpath = os.path.expanduser(data["output_path"])
     os.makedirs(os.path.dirname(outpath), exist_ok=True)

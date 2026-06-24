@@ -9,18 +9,11 @@ SKILLS_SRC="$HOME/.claude/skills"
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 SKILLS_DEST="$REPO_DIR/skills"
 
-# Non-med-school skills to exclude from backup
-EXCLUDE="morning-briefing"
-
 echo "Syncing skills from ~/.claude/skills/ ..."
 
 for skill_dir in "$SKILLS_SRC"/*/; do
     skill_name=$(basename "$skill_dir")
     skill_file="$skill_dir/SKILL.md"
-    if echo "$EXCLUDE" | grep -qw "$skill_name"; then
-        echo "  Skipped: $skill_name (excluded)"
-        continue
-    fi
     if [ -f "$skill_file" ]; then
         mkdir -p "$SKILLS_DEST/$skill_name"
         cp "$skill_file" "$SKILLS_DEST/$skill_name/SKILL.md"

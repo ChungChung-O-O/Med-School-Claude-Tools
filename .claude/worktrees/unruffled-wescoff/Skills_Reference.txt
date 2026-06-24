@@ -1,14 +1,11 @@
 ================================================================================
-  CLAUDE CODE SKILLS — MED SCHOOL QUICK REFERENCE
+  CLAUDE CODE SKILLS — QUICK REFERENCE
   Location of skills: ~/.claude/skills/
-  Last updated: 2026-06-24 (added course-prep orchestrator skill: folder + objectives → study guide + Anki + spaced reviews + quiz)
+  Last updated: 2026-03-05 (added lecture-to-notebooklm)
 ================================================================================
 
-This file is your cheat sheet for medical school skills only.
-For daily life tools (morning briefing, Telegram secretary bot), see:
-  ~/Desktop/Claude Code/Claude_Daily/README.md
-
-Update this file whenever a med school skill is added or changed.
+This file is your cheat sheet. When you forget how to use a skill, open this.
+Update it whenever a new skill is added or an existing one changes.
 
 --------------------------------------------------------------------------------
 SKILL OVERVIEW (what you have right now)
@@ -21,18 +18,9 @@ SKILL OVERVIEW (what you have right now)
   4. lecture-to-notebooklm     — Lecture slides (PPTX/PDF/DOCX) → structured .md for NotebookLM
   5. notebooklm-to-anki        — NotebookLM output → Anki deck (.apkg)
   6. clinical-vignette-coach   — Socratic vignette tutor → gap analysis + session log
-  7. syllabus-to-calendar      — Syllabus PDF/image/text → bulk Google Calendar events
-  8. course-prep               — Course folder + objectives list → study guide + Anki
-                                 deck + spaced reviews + active-recall quiz (orchestrator)
 
-  DAILY TOOLS (in Claude_Daily — see README.md there for full docs)
-  -  morning-briefing         — Daily market/finance briefing → MP3 (auto 8am)
-  -  daily-secretary          — Telegram secretary bot (schedule + calendar)
-  -  prompt-engineer          — Review prompts/skills/system instructions for issues before use
-  -  gstack (/review, /ship, /plan-eng-review)
-                              — Developer workflow skills for quant-trader + secretary-bot.
-                                NOT used in med school study pipeline.
-                                See Claude_Daily/README.md § 4 for full details.
+  OTHER SKILLS (not documented here — see ~/.claude/skills/SKILLS_GUIDE.txt)
+  -  morning-briefing         — Daily market/finance briefing → MP3
 
 --------------------------------------------------------------------------------
 
@@ -117,7 +105,7 @@ WHAT YOU GET
 ZOTERO INTEGRATION (OPT-IN)
   After saving the PDF, Claude asks: "Save to Zotero? [y/N]"
   Say y to add the paper (title, authors, journal, DOI, PMID) to your Zotero library.
-  Credentials stored at: ~/Desktop/Claude Code/Claude_For_School/config/zotero_config.json
+  Credentials stored at: ~/Desktop/Medical School/Claude/config/zotero_config.json
 
 DIFFERENCE FROM HOT PAPER READER
   Hot Paper Reader = you give keywords, it FINDS the paper for you
@@ -167,7 +155,7 @@ AUTO-DETECTED SCHEMAS
 
 WHAT YOU GET
   .txt file saved to:
-    ~/Desktop/Claude Code/Claude_For_School/NotebookLM/
+    ~/Desktop/Medical School/Claude/NotebookLM/
 
   Naming:
     Research article:  NLM_PICO_<AuthorLastName>_<Year>_<Date>.txt
@@ -221,7 +209,7 @@ SCHEMA AUTO-DETECTION
 
 WHAT YOU GET
   .md file saved to:
-    ~/Desktop/Claude Code/Claude_For_School/NotebookLM/
+    ~/Desktop/Medical School/Claude/NotebookLM/
 
   Naming:
     Step 1 lecture:  NLM_Lec_Step1_<topic_slug>_<Date>.md
@@ -255,13 +243,8 @@ DEPENDENCIES
 WHAT IT DOES
   Reads any NotebookLM output, generates comprehensive Anki cards with
   context-detected card types (Cloze for mechanisms/pathways, Basic Q&A for
-  definitions/criteria/drug pairings), applies double-tagging, and delivers
-  cards via Anki-Connect (if Anki is open) or a .apkg file (fallback).
-
-ANKI-CONNECT DIRECT IMPORT (NEW)
-  If Anki is open and the AnkiConnect add-on is running, cards are injected
-  directly into Anki — no file import needed. If Anki is closed, falls back
-  to .apkg generation as before.
+  definitions/criteria/drug pairings), applies double-tagging, and outputs
+  a ready-to-import .apkg file.
 
 HOW TO TRIGGER
   "make anki cards from: <source>"
@@ -270,7 +253,7 @@ HOW TO TRIGGER
   "generate cards from: <source>"
 
   Source can be:
-    - A .txt file:    "make anki cards from: /Desktop/Claude Code/Claude_For_School/NotebookLM/NLM_PICO_Smith_2024_2026-03-05.txt"
+    - A .txt file:    "make anki cards from: /Desktop/Medical School/Claude/NotebookLM/NLM_PICO_Smith_2024_2026-03-05.txt"
     - A .pdf file:    "anki: /path/to/lecture_notes.pdf"
     - A .mp3 file:    "anki: /path/to/notebooklm_audio.mp3"  (requires Whisper — see below)
     - Pasted text:    Paste a NotebookLM study guide and ask for cards
@@ -301,7 +284,7 @@ TAGGING SYSTEM (every card gets 3 tags)
 
 WHAT YOU GET
   .apkg file saved to:
-    ~/Desktop/Claude Code/Claude_For_School/Anki/
+    ~/Desktop/Medical School/Claude/Anki/
 
   Naming:   Anki_<TopicSlug>_<Date>.apkg
   Deck name in Anki: Claude::<TopicSlug>_<Date>
@@ -399,7 +382,7 @@ CONTRADICTION HANDLING (strict — no hallucination)
 WHAT YOU GET
   Chat-based gap analysis (in-session)
   Session log saved to:
-    ~/Desktop/Claude Code/Claude_For_School/CaseReview/
+    ~/Desktop/Medical School/Claude/CaseReview/
   Naming: CaseReview_<TopicSlug>_<Date>.md
 
   Log contains: vignette, your reasoning, full Socratic exchange,
@@ -408,15 +391,6 @@ WHAT YOU GET
   On future sessions, Claude will check if you've done a similar case
   before and vary the Socratic angle accordingly.
 
-POST-SESSION ACTIONS (NEW — Phase 6)
-  After the gap analysis, Claude will ask:
-  "(A) add learning points to Anki, (B) schedule a calendar review, (C) both, (D) skip"
-
-  Option A — Anki: adds the 3 key learning points as Basic cards to Claude::CaseReview
-              (requires Anki open with AnkiConnect)
-  Option B — Calendar: creates an Apple Calendar event with a 15-min reminder
-              (requires apple-calendar MCP — will prompt for access on first use)
-
 NO DEPENDENCIES REQUIRED
   Fully chat-based. No Python scripts or external libraries needed.
 
@@ -424,137 +398,24 @@ NO DEPENDENCIES REQUIRED
 
 
 ================================================================================
-MCP SERVERS (installed 2026-03-07 — active in Claude_Daily project)
+INSTALLED DEPENDENCIES (as of 2026-03-06)
 ================================================================================
 
-  fetch           ACTIVE   python3 -m mcp_server_fetch
-                           Better HTML-to-markdown for URL inputs in paper skills.
-                           Used by: hot-paper-reader, specific-paper-reader, medarticle-to-notebooklm
-
-  anki            ACTIVE   npx @ankimcp/anki-mcp-server
-                           Direct card injection into Anki (no file import needed).
-                           REQUIRES: Anki open + AnkiConnect add-on running (port 8765)
-                           Used by: notebooklm-to-anki, clinical-vignette-coach
-
-  apple-calendar  ACTIVE   npx mcp-server-apple-events
-                           Create/read Apple Calendar events and Reminders.
-                           REQUIRES: grant Full Calendar Access to Terminal on first use.
-                           Used by: clinical-vignette-coach
-
-  sqlite          ACTIVE   npx mcp-server-sqlite-npx → Anki2/Austin/collection.anki2
-                           Direct query access to your Anki database.
-
-  github          ACTIVE   npx @modelcontextprotocol/server-github
-                           GitHub repo operations. PAT expires 2027-03-07.
-
-================================================================================
-INSTALLED DEPENDENCIES (as of 2026-03-07)
-================================================================================
-
-  fpdf2            INSTALLED   (for PDF generation — hot-paper-reader, specific-paper-reader)
-  genanki          INSTALLED   (for .apkg fallback — notebooklm-to-anki)
-  python-pptx      INSTALLED   (PPTX input for lecture-to-notebooklm)
-  python-docx      INSTALLED   (Word .docx input for lecture-to-notebooklm)
-  openai-whisper   INSTALLED   (.mp3 input for notebooklm-to-anki)
-  requests         INSTALLED   (Zotero API calls — hot-paper-reader, specific-paper-reader)
-  mcp-server-fetch INSTALLED   (via pip — Fetch MCP backend)
-
-================================================================================
-7. SYLLABUS TO CALENDAR
-================================================================================
-
-WHAT IT DOES
-  Parses a course syllabus (PDF, image, or pasted text) and bulk-creates
-  Google Calendar events for every lecture, lab, exam, deadline, and
-  orientation item found. Shows a preview table before creating anything.
-
-HOW TO TRIGGER
-  Type any of these in Claude Code:
-
-    /syllabus
-    syllabus: /path/to/syllabus.pdf
-    "parse my syllabus"
-    "import syllabus to calendar"
-
-  Accepts:
-    - PDF file path (Claude reads it directly)
-    - Image/screenshot path (Claude sees it)
-    - Pasted syllabus text
-
-WORKFLOW
-  1. Provide syllabus (file path or paste)
-  2. Claude extracts all events with date/time/title/type
-  3. Preview table shown — confirm or filter (e.g. "exams only")
-  4. Events created on your Google Calendar in bulk
-  5. Summary reported (X/Y events created)
-
-FILTER OPTIONS (say after preview)
-  "yes"                  — create all events
-  "exams only"           — create only exam-type events
-  "skip lectures"        — create everything except lectures
-  "just exams and deadlines" — create filtered subset
-
-NOTES
-  - Recurring weekly lectures are expanded into individual events (not recurrences)
-    so holiday exceptions are handled correctly
-  - All-day events are used for deadlines with no time given
-  - Default exam duration is 2 hours if end time is not given
-  - Requires Google Calendar MCP to be active (gcal_create_event)
-
-DESIGN DOC (Anki integration)
-  Claude_For_School/anki-integration-plan.md — algorithm for integrating
-  the MSUCOM upperclassman Anki deck when it arrives (unsuspend by block/
-  lecture, coverage tracking, bot commands). Build pending deck arrival.
-
-================================================================================
-8. COURSE PREP  (orchestrator)
-================================================================================
-
-WHAT IT DOES
-  Turns a whole folder of course materials into a complete study pack. Point it
-  at a course folder that has (a) an objectives / "FACts" / learning-goals doc and
-  (b) source materials (pptx/docx/pdf). It produces:
-    - an objective-by-objective study guide (.md, saved IN the course folder)
-    - an Anki deck (.apkg, saved to the Anki/ folder)
-    - spaced reviews + the quiz/exam date on the Medical School calendar
-    - a live active-recall quiz on the objectives
-
-HOW TO TRIGGER
-  "course prep: <folder path>"      "prep this folder"      "FACts prep"
-  "make a study pack from this folder"   or just drop a course folder path
-  "get me ready for the <X> quiz" (with a materials folder)
-
-EXECUTION MODEL (Opus brain, Sonnet hand)
-  Opus writes the coverage blueprint (every objective + term) and verifies the
-  output; Sonnet does the bulk extraction + drafting against that blueprint;
-  Opus runs the live quiz directly. This minimizes tokens AND missed details.
-
-PIPELINE
-  0. Intake — find the objectives file + source files + exam date
-  1. Blueprint — Opus enumerates everything that must be covered
-  2. Study guide — Sonnet drafts it from the sources (flags any (supp) fill-ins)
-  3. Verify — Opus checks every blueprint item + spot-checks accuracy
-  4. Anki — Opus blueprints cards, Sonnet builds the .apkg (notebooklm-to-anki rules)
-  5. Spaced reviews — propose dates, confirm, then write to the calendar
-  6. Quiz — Opus quizzes interactively (answers withheld), routes weak topics to review
-
-CHAINS THESE SKILLS
-  lecture-to-notebooklm (deep slide structuring), notebooklm-to-anki (deck),
-  clinical-vignette-coach (case-style quizzing), + Johnny's schedule_spaced_reviews.
-
-NOTES
-  - Confirms before any calendar write.
-  - Grounds content in the provided materials; supplements are flagged, never faked.
-  - Study guide stays in the course folder so per-course material lives together.
+  fpdf2           INSTALLED   (for PDF generation — hot-paper-reader, specific-paper-reader)
+  genanki         INSTALLED   (for .apkg generation — notebooklm-to-anki)
+  python-pptx     INSTALLED   (PPTX input for lecture-to-notebooklm)
+  python-docx     INSTALLED   (Word .docx input for lecture-to-notebooklm)
+  openai-whisper  INSTALLED   (.mp3 input for notebooklm-to-anki)
+  requests        INSTALLED   (Zotero API calls — hot-paper-reader, specific-paper-reader)
 
 ================================================================================
 OUTPUT FOLDER MAP
 ================================================================================
 
   PDFs (paper summaries):     ~/Desktop/
-  NotebookLM source files:    ~/Desktop/Claude Code/Claude_For_School/NotebookLM/
-  Anki decks:                 ~/Desktop/Claude Code/Claude_For_School/Anki/
-  Case review logs:           ~/Desktop/Claude Code/Claude_For_School/CaseReview/
-  Zotero credentials:         ~/Desktop/Claude Code/Claude_For_School/config/zotero_config.json
+  NotebookLM source files:    ~/Desktop/Medical School/Claude/NotebookLM/
+  Anki decks:                 ~/Desktop/Medical School/Claude/Anki/
+  Case review logs:           ~/Desktop/Medical School/Claude/CaseReview/
+  Zotero credentials:         ~/Desktop/Medical School/Claude/config/zotero_config.json
 
 ================================================================================
