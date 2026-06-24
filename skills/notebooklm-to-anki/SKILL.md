@@ -75,6 +75,8 @@ Tell the user in one sentence: topic detected, domain, and approximate card coun
 - Drug mechanisms of action
 - Sequences or ordered steps (e.g., coagulation cascade, complement)
 - Fill-in-the-blank facts where the deleted word IS the testable concept
+- **Anatomy relationships** — innervation, action, nerve roots, attachments, blood supply, drainage. Prefer cloze for these and bias toward cloze when the source is anatomy. Cloze multiple linked facts in one sentence with separate deletions so each is tested independently, e.g. `The {{c1::axillary nerve}} (roots {{c2::C5-C6}}) innervates {{c3::deltoid}} and teres minor; injury causes loss of {{c4::arm abduction}}.`
+  - For *visual* identification (naming a structure pointed to on an image), text cloze is the wrong tool — that is an **Image Occlusion** card (native in Anki 23.10+). This skill cannot auto-build image-occlusion cards from text; when a topic needs them, tell the user which figure + labels to occlude rather than forcing a text cloze.
 
 **Use BASIC (Q&A) when content contains:**
 - Definitions
