@@ -238,7 +238,7 @@ After the script succeeds, verify the output file exists and has a non-zero size
 
 > **To import:** Open Anki → File → Import → select the `.apkg` file. It will merge into the `MedSchool` deck. If `MedSchool` doesn't exist yet, Anki will create it automatically. The `Undergrad MCAT (Austin)` deck is kept entirely separate — never import med school cards there.
 
-Do NOT print all cards to chat. A brief per-section breakdown is fine (e.g., "Generated 18 HighYield, 14 MidYield, 8 LowYield cards").
+Do NOT print all cards to chat. A brief per-section breakdown is fine (e.g., "Generated 18 Yield::High, 14 Yield::Mid, 8 Yield::Low cards").
 
 ---
 
