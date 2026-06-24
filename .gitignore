@@ -17,3 +17,6 @@ CaseReview/
 # Bot credentials — never commit
 secretary-bot/.env
 config/zotero_config.json
+
+# Claude Code local worktrees / settings — never track
+.claude/
