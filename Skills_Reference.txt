@@ -258,10 +258,16 @@ WHAT IT DOES
   definitions/criteria/drug pairings), applies double-tagging, and delivers
   cards via Anki-Connect (if Anki is open) or a .apkg file (fallback).
 
-ANKI-CONNECT DIRECT IMPORT (NEW)
-  If Anki is open and the AnkiConnect add-on is running, cards are injected
-  directly into Anki — no file import needed. If Anki is closed, falls back
-  to .apkg generation as before.
+ANKI-CONNECT DIRECT IMPORT (DEFAULT)
+  If Anki is open and the AnkiConnect add-on is running (localhost:8765), cards
+  are injected directly into Anki — no file import needed. If Anki is closed,
+  falls back to .apkg generation (deck name: MedSchool).
+
+DECK ORGANIZATION (canonical — applies forever)
+  ALL med school cards go into ONE home deck named exactly "MedSchool".
+  Never create per-lecture or per-date subdecks.
+  Never touch "Undergrad MCAT (Austin)" — that is a separate pre-med deck.
+  Organization is by TAGS, not by decks.
 
 HOW TO TRIGGER
   "make anki cards from: <source>"
@@ -294,22 +300,26 @@ CARD TYPE LOGIC (auto-detected per fact)
 
   High-yield facts get BOTH a cloze AND a basic card.
 
-TAGGING SYSTEM (every card gets 3 tags)
-  Tag 1 — Auto organ system:    e.g. Cardiology, Pulmonology, GI
-  Tag 2 — First Aid standard:   e.g. FirstAid::Cardiology
-  Tag 3 — Yield level:          HighYield, MidYield, or LowYield
+6-AXIS TAG SCHEMA (every card gets all applicable axes)
+  Course::<code>        e.g. Course::OST510  (course/block)
+  System::<system>      e.g. System::Cardiovascular  (body system or discipline)
+  Source::<material>    e.g. Source::FACts, Source::Lecture, Source::Pathoma
+  Yield::High|Mid|Low   e.g. Yield::High
+  Boards::<section>     e.g. Boards::Cardiology  (First Aid / COMLEX section)
+  Exam::<id>            e.g. Exam::2026-07-16  (optional — only when exam date known)
+
+  Example: ["Course::OST510","System::Anatomy","Source::FACts","Yield::High","Boards::Anatomy","Exam::2026-07-16"]
 
 WHAT YOU GET
-  .apkg file saved to:
+  .apkg file saved to (Path B fallback only):
     ~/Desktop/Claude Code/Claude_For_School/Anki/
 
   Naming:   Anki_<TopicSlug>_<Date>.apkg
-  Deck name in Anki: Claude::<TopicSlug>_<Date>
+  Deck name in Anki: MedSchool
 
-HOW TO IMPORT INTO ANKI
+HOW TO IMPORT INTO ANKI (Path B fallback only)
   Anki → File → Import → select the .apkg file
-  It will appear as a subdeck under "Claude" automatically.
-  If "Claude" parent deck doesn't exist yet, Anki creates it.
+  It merges into the MedSchool deck automatically.
 
 CARD VOLUME TARGETS
   Short source (<500 words):      15–25 cards
@@ -534,7 +544,10 @@ PIPELINE
   1. Blueprint — Opus enumerates everything that must be covered
   2. Study guide — Sonnet drafts it from the sources (flags any (supp) fill-ins)
   3. Verify — Opus checks every blueprint item + spot-checks accuracy
-  4. Anki — Opus blueprints cards, Sonnet builds the .apkg (notebooklm-to-anki rules)
+  4. Anki — Opus blueprints cards, Sonnet builds the .apkg (notebooklm-to-anki rules);
+            all cards go into the single "MedSchool" deck with the 6-axis tag schema
+            (Course/System/Source/Yield/Boards/Exam); auto-imported via AnkiConnect;
+            "Undergrad MCAT (Austin)" deck is never touched.
   5. Spaced reviews — propose dates, confirm, then write to the calendar
   6. Quiz — Opus quizzes interactively (answers withheld), routes weak topics to review
 

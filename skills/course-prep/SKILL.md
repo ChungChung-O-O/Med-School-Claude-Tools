@@ -59,8 +59,14 @@ Read the guide. Confirm every blueprint item is covered (walk the checklist). Sp
 ## Phase 4 — Anki deck (Opus blueprint + Sonnet hand)
 
 1. Opus writes a **card coverage blueprint**: which terms/concepts become cards, which are Q&A vs cloze (cloze for sequences/mechanisms; Q&A for term→definition).
-2. Spawn Sonnet to draft the cards and build the `.apkg` following the **notebooklm-to-anki** skill's rules (card quality, tagging, bundled `generate_apkg.py` script). Output to `~/Desktop/Claude Code/Claude_For_School/Anki/Anki_<CourseTag>_<YYYY-MM-DD>.apkg`.
-3. Opus verifies: file exists, non-zero, card count sane, blueprint covered.
+2. Spawn Sonnet to draft the cards and build the `.apkg` following the **notebooklm-to-anki** skill's rules (card quality, 6-axis tag schema, bundled `generate_apkg.py` script). Output to `~/Desktop/Claude Code/Claude_For_School/Anki/Anki_<CourseTag>_<YYYY-MM-DD>.apkg`.
+
+   **Canonical organization (non-negotiable):**
+   - All cards go into the **`MedSchool`** home deck. Never create per-lecture or per-date subdecks. Never touch `Undergrad MCAT (Austin)`.
+   - Tags use the 6-axis schema: `Course::<code>`, `System::<system>`, `Source::<material>`, `Yield::High|Mid|Low`, `Boards::<section>`, and optionally `Exam::<id>`.
+   - Auto-import via AnkiConnect (localhost:8765) is the default. If Anki is closed, fall back to .apkg with deck name `MedSchool`.
+
+3. Opus verifies: file exists, non-zero, card count sane, blueprint covered, no old-style `Claude::` deck names or `FirstAid::` tags present.
 
 ## Phase 5 — Spaced reviews + exam date (confirm before writing)
 

@@ -7,6 +7,7 @@ Usage:
 
 Input JSON schema:
 {
+  "deck": "MedSchool",
   "topic_slug": "HeartFailure",
   "output_path": "~/Desktop/Claude Code/Claude_For_School/Anki/Anki_HeartFailure_2024-01-01.apkg",
   "cards": [
@@ -15,13 +16,13 @@ Input JSON schema:
       "front": "What is the first-line treatment for HFrEF?",
       "back": "ACE inhibitor (or ARB) + beta-blocker + MRA",
       "extra": "GDMT: ACE/ARB, BB, MRA, SGLT2i all reduce mortality in HFrEF.",
-      "tags": ["Cardiology", "FirstAid::Cardiology", "HighYield"]
+      "tags": ["Course::OST510", "System::Cardiovascular", "Source::Lecture", "Yield::High", "Boards::Cardiology"]
     },
     {
       "type": "cloze",
       "text": "In HFrEF, {{c1::ACE inhibitors}} reduce afterload by blocking angiotensin II production.",
       "extra": "Also reduce preload via aldosterone suppression.",
-      "tags": ["Cardiology", "FirstAid::Cardiology", "HighYield"]
+      "tags": ["Course::OST510", "System::Cardiovascular", "Source::Lecture", "Yield::High", "Boards::Cardiology"]
     }
   ]
 }
@@ -34,7 +35,6 @@ Fixed model IDs (never change — Anki uses these to identify note types):
 import json
 import os
 import sys
-from datetime import date
 import hashlib
 
 try:
@@ -79,9 +79,10 @@ CLOZE_MODEL = genanki.Model(
 
 
 def generate(data: dict):
-    topic_slug = data["topic_slug"]
-    today = date.today().strftime("%Y-%m-%d")
-    deck_name = f"Claude::{topic_slug}_{today}"
+    # All med school cards go into the single MedSchool home deck.
+    # Accepts an optional "deck" field in the JSON; defaults to "MedSchool".
+    # Never derive a Claude::<slug>_<date> name — that pattern is retired.
+    deck_name = data.get("deck", "MedSchool")
 
     deck_id = int(hashlib.md5(deck_name.encode()).hexdigest(), 16) % (2**31)
     deck = genanki.Deck(deck_id, deck_name)

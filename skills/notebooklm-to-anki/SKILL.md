@@ -1,6 +1,6 @@
 ---
 name: notebooklm-to-anki
-description: Use this skill when the user wants to generate Anki flashcards from any NotebookLM output — including .txt study guides, .pdf exports, .mp3 audio overviews, or pasted notes. Outputs a .apkg file ready to import into Anki under the "Claude" deck. Trigger on phrases like "make anki cards from this", "anki:", "notebooklm to anki", "generate cards from", or whenever a user provides a .txt/.pdf/.mp3 file and wants flashcards from it.
+description: Use this skill when the user wants to generate Anki flashcards from any NotebookLM output — including .txt study guides, .pdf exports, .mp3 audio overviews, or pasted notes. Cards go into the single MedSchool home deck with a 6-axis tag schema. Trigger on phrases like "make anki cards from this", "anki:", "notebooklm to anki", "generate cards from", or whenever a user provides a .txt/.pdf/.mp3 file and wants flashcards from it.
 ---
 
 # NotebookLM to Anki
@@ -98,10 +98,10 @@ A single fact may produce BOTH a cloze and a basic card if it merits both (e.g.,
 
 ### Yield Classification
 
-Assign each card a yield level based on content signals:
-- **HighYield**: first-line treatments, classic presentations, diagnostic criteria, primary outcomes with key numbers, pathognomonic findings, board-tested mechanisms
-- **MidYield**: second-line treatments, important complications, secondary outcomes, supporting mechanisms
-- **LowYield**: methodology notes, statistical approaches, minor variants, background context
+Assign each card a yield level based on content signals. Use the `Yield::` prefix exactly:
+- **`Yield::High`**: first-line treatments, classic presentations, diagnostic criteria, primary outcomes with key numbers, pathognomonic findings, board-tested mechanisms
+- **`Yield::Mid`**: second-line treatments, important complications, secondary outcomes, supporting mechanisms
+- **`Yield::Low`**: methodology notes, statistical approaches, minor variants, background context
 
 ### Card Volume Target
 
@@ -125,62 +125,62 @@ front: "..." (basic only)
 back: "..." (basic only)
 text: "..." (cloze only — must contain {{c1::...}} syntax)
 extra: "..." (optional context/memory aid)
-tags: ["AutoTag", "FirstAid::Section", "YieldLevel"]
+tags: ["Course::OST510", "System::Cardiovascular", "Source::FACts", "Yield::High", "Boards::Cardiology"]
 ```
 
-### Tagging System (Double Tags)
+### Tag Schema (6-Axis Hierarchical Tags)
 
-Every card gets **two tag layers**:
+Every card gets all applicable axes from the following schema. Use `::` hierarchy exactly as shown.
 
-**Layer 1 — Auto-detected topic tag:**
-Organ system or discipline detected in Step 2. Use clean single-word tags:
-`Cardiology`, `Pulmonology`, `GI`, `Hematology`, `Neurology`, `Endocrinology`, `Nephrology`, `InfectiousDisease`, `Pharmacology`, `Immunology`, `Biochemistry`, `Psychiatry`, `Musculoskeletal`, `Dermatology`, `Reproductive`, `Pediatrics`
+**Axis 1 — Course:**
+`Course::<code>` — the course or block the material is from. Infer from the source folder or material name.
+Examples: `Course::OST510`, `Course::OST520`
 
-If the source covers multiple systems (e.g., a sepsis article touching ID + critical care), tag with the primary domain.
+**Axis 2 — System:**
+`System::<system>` — body system or discipline. Choose the primary one:
+`Anatomy`, `Cardiovascular`, `Respiratory`, `Renal`, `GI`, `Endocrine`, `Reproductive`, `Hematology`, `Musculoskeletal`, `Nervous`, `Lymphatic`, `Immune`, `Dermatology`, `Psychiatry`, `Biochemistry`, `Microbiology`, `Pharmacology`, `Pathology`
 
-**Layer 2 — First Aid standard tag:**
-Map to First Aid 2nd edition section using `FirstAid::` prefix:
-- `FirstAid::Cardiology`
-- `FirstAid::Pulmonology`
-- `FirstAid::Gastroenterology`
-- `FirstAid::Hematology`
-- `FirstAid::Neurology`
-- `FirstAid::Endocrinology`
-- `FirstAid::Nephrology`
-- `FirstAid::InfectiousDisease`
-- `FirstAid::Pharmacology`
-- `FirstAid::Immunology`
-- `FirstAid::Biochemistry`
-- `FirstAid::Psychiatry`
-- `FirstAid::Musculoskeletal`
-- `FirstAid::Dermatology`
-- `FirstAid::ReproductiveEndocrinology`
-- `FirstAid::Pediatrics`
-- `FirstAid::Pathology` (for general pathology principles)
+If the source spans multiple systems, tag with the primary domain.
 
-**Layer 3 — Yield tag:**
-`HighYield`, `MidYield`, or `LowYield`
+**Axis 3 — Source:**
+`Source::<material>` — where this content comes from.
+Examples: `Source::FACts`, `Source::Lecture`, `Source::Pathoma`, `Source::Sketchy`, `Source::UpToDate`
 
-Example final tags for a card: `["Cardiology", "FirstAid::Cardiology", "HighYield"]`
+**Axis 4 — Yield:**
+`Yield::High` | `Yield::Mid` | `Yield::Low`
+
+**Axis 5 — Boards:**
+`Boards::<section>` — First Aid / COMLEX-Step section this maps to. This replaces the old `FirstAid::` prefix.
+Examples: `Boards::Cardiology`, `Boards::Anatomy`, `Boards::Pharmacology`, `Boards::Pathology`
+
+**Axis 6 — Exam (optional):**
+`Exam::<id>` — include only when a specific exam/quiz date is known.
+Example: `Exam::2026-07-16`
+
+Example final tag list: `["Course::OST510", "System::Anatomy", "Source::FACts", "Yield::High", "Boards::Anatomy", "Exam::2026-07-16"]`
 
 ---
 
 ## Step 5: Deliver Cards — Anki-Connect or .apkg Fallback
 
+### Home Deck Rule
+
+**ALL med school cards go into ONE home deck named exactly `MedSchool`.** Never create per-lecture or per-date subdecks (the old `Claude::<TopicSlug>_<TODAY>` pattern is removed). Never add to or touch the deck `Undergrad MCAT (Austin)` — that is a separate pre-med deck and must never be mixed with med school cards. Organization is by tags, not decks.
+
 **First, check if Anki is open.** Attempt to use the `anki` MCP tool to list deck names as a connectivity test.
 
-- **If successful (Anki is running with AnkiConnect):** Use Path A — add cards directly. No file needed.
-- **If failed (connection refused, Anki not open):** Use Path B — generate .apkg for manual import.
+- **If successful (Anki is running with AnkiConnect):** Use Path A — add cards directly into `MedSchool`. No file needed.
+- **If failed (connection refused, Anki not open):** Use Path B — generate .apkg named `MedSchool` for manual import.
 
 ### Path A: Direct Import via Anki-Connect MCP (preferred)
 
-1. Create the deck if it doesn't exist: use the `anki` MCP `createDeck` tool with name `Claude::<TopicSlug>_<TODAY>`.
+1. Create the deck if it doesn't exist: use the `anki` MCP `createDeck` tool with name `MedSchool`.
 2. Add all cards in batch using the `anki` MCP `addNotes` tool.
    - For Basic cards: model = `"Claude Medical Basic"`, fields: Front, Back, Extra, tags as generated
    - For Cloze cards: model = `"Claude Medical Cloze"`, fields: Text, Extra, tags as generated
 3. Confirm to the user:
-   - Cards added directly to Anki — no import step required
-   - Deck name, total count (X basic + Y cloze), tag summary
+   - Cards added directly to Anki into `MedSchool` — no import step required
+   - Total count (X basic + Y cloze), tag summary
 
 Skip Path B entirely if Path A succeeds.
 
@@ -192,6 +192,7 @@ After generating all card data, write a JSON file and run the bundled script. Th
 
 ```json
 {
+  "deck": "MedSchool",
   "topic_slug": "HeartFailure",
   "output_path": "~/Desktop/Claude Code/Claude_For_School/Anki/Anki_HeartFailure_YYYY-MM-DD.apkg",
   "cards": [
@@ -200,13 +201,13 @@ After generating all card data, write a JSON file and run the bundled script. Th
       "front": "Question text",
       "back": "Answer text",
       "extra": "Memory aid or context",
-      "tags": ["Cardiology", "FirstAid::Cardiology", "HighYield"]
+      "tags": ["Course::OST510", "System::Cardiovascular", "Source::Lecture", "Yield::High", "Boards::Cardiology"]
     },
     {
       "type": "cloze",
       "text": "In HFrEF, {{c1::ACE inhibitors}} reduce afterload.",
       "extra": "Memory aid",
-      "tags": ["Cardiology", "FirstAid::Cardiology", "HighYield"]
+      "tags": ["Course::OST510", "System::Cardiovascular", "Source::Lecture", "Yield::High", "Boards::Cardiology"]
     }
   ]
 }
@@ -229,13 +230,13 @@ If the script fails:
 ## Step 6: Confirm Output to User
 
 After the script succeeds, verify the output file exists and has a non-zero size before reporting. Then report:
-- Deck name (e.g., `Claude::HeartFailure_2026-03-05`)
+- Deck name: `MedSchool`
 - Total card count, broken down: X basic + Y cloze
 - File path
-- Tag summary: which auto-tag and First Aid section were applied
-- Import instruction (always include):
+- Tag summary: which axes were applied (Course, System, Source, Yield, Boards, Exam if applicable)
+- Import instruction (always include for Path B):
 
-> **To import:** Open Anki → File → Import → select the `.apkg` file. It will appear as a subdeck under "Claude". If the "Claude" parent deck doesn't exist yet, Anki will create it automatically.
+> **To import:** Open Anki → File → Import → select the `.apkg` file. It will merge into the `MedSchool` deck. If `MedSchool` doesn't exist yet, Anki will create it automatically. The `Undergrad MCAT (Austin)` deck is kept entirely separate — never import med school cards there.
 
 Do NOT print all cards to chat. A brief per-section breakdown is fine (e.g., "Generated 18 HighYield, 14 MidYield, 8 LowYield cards").
 
