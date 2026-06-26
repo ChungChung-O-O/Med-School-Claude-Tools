@@ -33,8 +33,20 @@ If the objectives file is ambiguous (multiple candidate docs), ask which one lis
 
 ## Phase 0 — Intake (Opus)
 
-1. List the folder. Identify the objectives file and the source materials. Common name signals: "FACts", "objectives", "learning goals", "quiz assignments", "study guide assignments".
-2. Confirm in one line what you detected: objectives file + N source files + the target quiz/exam date if known. If the exam date is unknown, ask once (it drives the spaced-review cadence).
+This skill expects a **canonical course-folder layout** so it never re-processes old files or eats its own output. Each course folder is organized as:
+
+```
+<Course>/
+  _inbox/        ← new source materials to process. The skill reads ONLY this.
+  _processed/    ← files already carded (moved here after a successful run). This IS the "done" record.
+  _outputs/      ← generated study guides + .apkg copies. NEVER read as a source.
+  objectives/    ← the FACts / objectives / learning-goals docs (the source of truth for what to cover).
+```
+
+1. **Check the layout.** If `_inbox/`, `_processed/`, `_outputs/`, and `objectives/` don't all exist, create them. On a first run against a flat folder, move loose source materials into `_inbox/` and the FACts/objectives doc into `objectives/` — but confirm which file is the objectives doc with Austin before moving it.
+2. **The input set for this run = the contents of `_inbox/` only.** Never scan `_processed/` or `_outputs/`. If `_inbox/` is empty, tell Austin there's nothing new to process and stop.
+3. **Identify the objectives file** from `objectives/` (name signals: "FACts", "objectives", "learning goals", "quiz assignments"). If multiple candidates, ask which one.
+4. Confirm in one line what you detected: objectives file + N new source files in `_inbox/` + the target quiz/exam date if known. If the exam date is unknown, ask once (it drives the spaced-review cadence).
 
 ## Phase 1 — Blueprint (Opus brain)
 
@@ -44,7 +56,7 @@ Read the objectives file in full. Produce a numbered coverage checklist, grouped
 
 Spawn a Sonnet subagent to:
 1. Extract text from every source file. For `.docx`/`.pptx`, extract paragraph/slide text (unzip XML if no library is available); for `.pdf` use the Read tool or `pypdf`.
-2. Write an **objective-by-objective study guide** to `<course-folder>/<CourseTag>_Study_Guide.md`:
+2. Write an **objective-by-objective study guide** to `<course-folder>/_outputs/<CourseTag>_Study_Guide.md` (in `_outputs/`, never the folder root, so it is never picked up as a source on a later run):
    - One `##` section per activity, in the objectives' order.
    - Restate each objective as a **bold prompt**, then a tight, high-yield answer. **Bold every key term on first use.**
    - Stay at the level the objectives ask for (recognition + basic understanding unless they demand more). Depth over padding, but cover every blueprint item.
@@ -68,7 +80,13 @@ Read the guide. Confirm every blueprint item is covered (walk the checklist). Sp
 
 3. Opus verifies: file exists, non-zero, card count sane, blueprint covered, no old-style `Claude::` deck names or `FirstAid::` tags present.
 
-## Phase 5 — Spaced reviews + exam date (confirm before writing)
+## Phase 4b — Mark sources processed (Opus)
+
+**Only after Phase 3 (guide verified) and Phase 4 (deck verified) both succeed:** move every source file processed this run from `_inbox/` to `_processed/`. This is the mechanism that prevents re-processing on the next run, so it must happen on every successful run.
+
+- Never move a file that failed to process. If a run is partial, leave the unprocessed files in `_inbox/` and tell Austin exactly which ones remain.
+- Do not move the objectives file — it stays in `objectives/`.
+- After moving, report the new `_inbox/` (should be empty) and `_processed/` counts in the final summary.
 
 On the **Medical School** Google Calendar:
 - Add the quiz/exam as an event on its date.
@@ -90,8 +108,9 @@ Offer to quiz him on the objectives now:
 
 | Artifact | Location |
 |---|---|
-| Study guide (`.md`) | the course folder itself (keeps per-course material together) |
-| Anki deck (`.apkg`) | `~/Desktop/Claude Code/Claude_For_School/Anki/` |
+| Study guide (`.md`) | `<course-folder>/_outputs/` (kept out of `_inbox/` so it is never re-read as a source) |
+| Anki deck (`.apkg`) | `~/Desktop/Claude Code/Claude_For_School/Anki/` (canonical) |
+| Processed source files | `<course-folder>/_processed/` (moved out of `_inbox/` after a successful run) |
 | Quiz/review events | Medical School Google Calendar |
 | Any case logs (if vignette-coach used) | `Claude_For_School/CaseReview/` |
 

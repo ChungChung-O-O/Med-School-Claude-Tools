@@ -532,10 +532,22 @@ WHAT IT DOES
   Turns a whole folder of course materials into a complete study pack. Point it
   at a course folder that has (a) an objectives / "FACts" / learning-goals doc and
   (b) source materials (pptx/docx/pdf). It produces:
-    - an objective-by-objective study guide (.md, saved IN the course folder)
+    - an objective-by-objective study guide (.md, saved to _outputs/)
     - an Anki deck (.apkg, saved to the Anki/ folder)
     - spaced reviews + the quiz/exam date on the Medical School calendar
     - a live active-recall quiz on the objectives
+
+CANONICAL FOLDER LAYOUT (added 2026-06-25 — keeps the automation from re-processing
+or eating its own output as the semester grows). Each course folder is organized:
+    <Course>/
+      _inbox/      <- YOU drop new slides/PDFs here. The skill reads ONLY this.
+      _processed/  <- skill moves files here after carding them = the "done" record
+      _outputs/    <- study guides + .apkg copies (never re-read as a source)
+      objectives/  <- the FACts / objectives / learning-goals docs
+  Your only habit all semester: drop new files in _inbox/. Each run processes only
+  what's there, then moves them to _processed/, so nothing is ever re-chewed and the
+  generated study guide can't be mistaken for a source. To see what's already done,
+  look in _processed/ or check the Doc:: tags in Anki (one per carded document).
 
 HOW TO TRIGGER
   "course prep: <folder path>"      "prep this folder"      "FACts prep"
@@ -548,7 +560,8 @@ EXECUTION MODEL (Opus brain, Sonnet hand)
   Opus runs the live quiz directly. This minimizes tokens AND missed details.
 
 PIPELINE
-  0. Intake — find the objectives file + source files + exam date
+  0. Intake — set up the _inbox/_processed/_outputs/objectives layout; read ONLY
+            _inbox/ for new sources; find the objectives file + exam date
   1. Blueprint — Opus enumerates everything that must be covered
   2. Study guide — Sonnet drafts it from the sources (flags any (supp) fill-ins)
   3. Verify — Opus checks every blueprint item + spot-checks accuracy
@@ -556,6 +569,8 @@ PIPELINE
             all cards go into the single "MedSchool" deck with the 7-axis tag schema
             (Course/System/Source/Yield/Boards/Doc/Exam); auto-imported via AnkiConnect;
             "Undergrad MCAT (Austin)" deck is never touched.
+  4b. Mark processed — after guide + deck verify, move this run's sources from
+            _inbox/ to _processed/ (prevents re-processing next run)
   5. Spaced reviews — propose dates, confirm, then write to the calendar
   6. Quiz — Opus quizzes interactively (answers withheld), routes weak topics to review
 
@@ -566,7 +581,8 @@ CHAINS THESE SKILLS
 NOTES
   - Confirms before any calendar write.
   - Grounds content in the provided materials; supplements are flagged, never faked.
-  - Study guide stays in the course folder so per-course material lives together.
+  - Study guide goes to _outputs/ (not the folder root) so it is never re-read as
+    a source on a later run.
 
 ================================================================================
 9. FILTERED DECK BUILDER
