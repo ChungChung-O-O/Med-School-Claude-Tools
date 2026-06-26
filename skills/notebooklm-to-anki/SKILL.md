@@ -1,6 +1,6 @@
 ---
 name: notebooklm-to-anki
-description: Use this skill when the user wants to generate Anki flashcards from any NotebookLM output — including .txt study guides, .pdf exports, .mp3 audio overviews, or pasted notes. Cards go into the single MedSchool home deck with a 6-axis tag schema. Trigger on phrases like "make anki cards from this", "anki:", "notebooklm to anki", "generate cards from", or whenever a user provides a .txt/.pdf/.mp3 file and wants flashcards from it.
+description: Use this skill when the user wants to generate Anki flashcards from any NotebookLM output — including .txt study guides, .pdf exports, .mp3 audio overviews, or pasted notes. Cards go into the single MedSchool home deck with a 7-axis tag schema. Trigger on phrases like "make anki cards from this", "anki:", "notebooklm to anki", "generate cards from", or whenever a user provides a .txt/.pdf/.mp3 file and wants flashcards from it.
 ---
 
 # NotebookLM to Anki
@@ -60,8 +60,9 @@ From the ingested content, extract:
 - **Medical domain**: organ system or discipline (Cardiology, Pulmonology, GI, Hematology, Neurology, Endocrinology, Nephrology, Infectious Disease, Pharmacology, Immunology, Biochemistry, etc.)
 - **Source type**: research article (PICO-structured) vs. clinical review/lecture
 - **Content density**: estimate total number of distinct testable facts
+- **Document name**: the specific source document this came from, used for the `Doc::` tag (see Axis 7). Derive it from the source filename (basename, no extension). For pasted text with no filename, ask the user for a short document name, or fall back to the detected topic.
 
-Tell the user in one sentence: topic detected, domain, and approximate card count target.
+Tell the user in one sentence: topic detected, domain, document name, and approximate card count target.
 
 ---
 
@@ -127,10 +128,10 @@ front: "..." (basic only)
 back: "..." (basic only)
 text: "..." (cloze only — must contain {{c1::...}} syntax)
 extra: "..." (optional context/memory aid)
-tags: ["Course::OST510", "System::Cardiovascular", "Source::FACts", "Yield::High", "Boards::Cardiology"]
+tags: ["Course::OST510", "System::Cardiovascular", "Source::FACts", "Yield::High", "Boards::Cardiology", "Doc::Heart_Failure"]
 ```
 
-### Tag Schema (6-Axis Hierarchical Tags)
+### Tag Schema (7-Axis Hierarchical Tags)
 
 Every card gets all applicable axes from the following schema. Use `::` hierarchy exactly as shown.
 
@@ -159,7 +160,13 @@ Examples: `Boards::Cardiology`, `Boards::Anatomy`, `Boards::Pharmacology`, `Boar
 `Exam::<id>` — include only when a specific exam/quiz date is known.
 Example: `Exam::2026-07-16`
 
-Example final tag list: `["Course::OST510", "System::Anatomy", "Source::FACts", "Yield::High", "Boards::Anatomy", "Exam::2026-07-16"]`
+**Axis 7 — Doc:**
+`Doc::<document_name>` — the specific source document/lecture this card came from. This is what lets a single document be isolated into a filtered deck later (see the `filtered-deck` skill). Apply exactly one `Doc::` tag per card.
+Derive the name from the source **filename**: take the basename, drop the extension, replace spaces and hyphens with underscores, and remove any character that is not a letter, digit, or underscore.
+Examples: `Basic Anatomical Terminology.pdf` -> `Doc::Basic_Anatomical_Terminology`; `OST510 - Cardiac Cycle.docx` -> `Doc::OST510_Cardiac_Cycle`.
+If the input is pasted text (no filename), ask the user for a short document name, or fall back to the detected topic in underscore form (e.g. `Doc::Heart_Failure`).
+
+Example final tag list: `["Course::OST510", "System::Anatomy", "Source::FACts", "Yield::High", "Boards::Anatomy", "Exam::2026-07-16", "Doc::Basic_Anatomical_Terminology"]`
 
 ---
 
@@ -203,13 +210,13 @@ After generating all card data, write a JSON file and run the bundled script. Th
       "front": "Question text",
       "back": "Answer text",
       "extra": "Memory aid or context",
-      "tags": ["Course::OST510", "System::Cardiovascular", "Source::Lecture", "Yield::High", "Boards::Cardiology"]
+      "tags": ["Course::OST510", "System::Cardiovascular", "Source::Lecture", "Yield::High", "Boards::Cardiology", "Doc::Heart_Failure"]
     },
     {
       "type": "cloze",
       "text": "In HFrEF, {{c1::ACE inhibitors}} reduce afterload.",
       "extra": "Memory aid",
-      "tags": ["Course::OST510", "System::Cardiovascular", "Source::Lecture", "Yield::High", "Boards::Cardiology"]
+      "tags": ["Course::OST510", "System::Cardiovascular", "Source::Lecture", "Yield::High", "Boards::Cardiology", "Doc::Heart_Failure"]
     }
   ]
 }
@@ -235,7 +242,7 @@ After the script succeeds, verify the output file exists and has a non-zero size
 - Deck name: `MedSchool`
 - Total card count, broken down: X basic + Y cloze
 - File path
-- Tag summary: which axes were applied (Course, System, Source, Yield, Boards, Exam if applicable)
+- Tag summary: which axes were applied (Course, System, Source, Yield, Boards, Doc, Exam if applicable)
 - Import instruction (always include for Path B):
 
 > **To import:** Open Anki → File → Import → select the `.apkg` file. It will merge into the `MedSchool` deck. If `MedSchool` doesn't exist yet, Anki will create it automatically. The `Undergrad MCAT (Austin)` deck is kept entirely separate — never import med school cards there.

@@ -1,7 +1,7 @@
 ================================================================================
   CLAUDE CODE SKILLS — MED SCHOOL QUICK REFERENCE
   Location of skills: ~/.claude/skills/
-  Last updated: 2026-06-25 (added filtered-deck skill + Doc:: tag axis)
+  Last updated: 2026-06-25 (notebooklm-to-anki now auto-tags Doc:: axis)
 ================================================================================
 
 This file is your cheat sheet for medical school skills only.
@@ -303,15 +303,20 @@ CARD TYPE LOGIC (auto-detected per fact)
 
   High-yield facts get BOTH a cloze AND a basic card.
 
-6-AXIS TAG SCHEMA (every card gets all applicable axes)
+7-AXIS TAG SCHEMA (every card gets all applicable axes)
   Course::<code>        e.g. Course::OST510  (course/block)
   System::<system>      e.g. System::Cardiovascular  (body system or discipline)
   Source::<material>    e.g. Source::FACts, Source::Lecture, Source::Pathoma
   Yield::High|Mid|Low   e.g. Yield::High
   Boards::<section>     e.g. Boards::Cardiology  (First Aid / COMLEX section)
   Exam::<id>            e.g. Exam::2026-07-16  (optional — only when exam date known)
+  Doc::<document_name>  e.g. Doc::Basic_Anatomical_Terminology  (AUTO — derived from source filename)
+                        Enables per-document filtered decks via the filtered-deck skill.
+                        Basename of source file, no extension, spaces/hyphens → underscores.
+                        For pasted text with no filename, Claude asks for a short name or
+                        falls back to the detected topic in underscore form (e.g. Doc::Heart_Failure).
 
-  Example: ["Course::OST510","System::Anatomy","Source::FACts","Yield::High","Boards::Anatomy","Exam::2026-07-16"]
+  Example: ["Course::OST510","System::Anatomy","Source::FACts","Yield::High","Boards::Anatomy","Exam::2026-07-16","Doc::Basic_Anatomical_Terminology"]
 
 WHAT YOU GET
   .apkg file saved to (Path B fallback only):
@@ -548,8 +553,8 @@ PIPELINE
   2. Study guide — Sonnet drafts it from the sources (flags any (supp) fill-ins)
   3. Verify — Opus checks every blueprint item + spot-checks accuracy
   4. Anki — Opus blueprints cards, Sonnet builds the .apkg (notebooklm-to-anki rules);
-            all cards go into the single "MedSchool" deck with the 6-axis tag schema
-            (Course/System/Source/Yield/Boards/Exam); auto-imported via AnkiConnect;
+            all cards go into the single "MedSchool" deck with the 7-axis tag schema
+            (Course/System/Source/Yield/Boards/Doc/Exam); auto-imported via AnkiConnect;
             "Undergrad MCAT (Austin)" deck is never touched.
   5. Spaced reviews — propose dates, confirm, then write to the calendar
   6. Quiz — Opus quizzes interactively (answers withheld), routes weak topics to review
