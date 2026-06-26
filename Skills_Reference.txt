@@ -1,7 +1,7 @@
 ================================================================================
   CLAUDE CODE SKILLS — MED SCHOOL QUICK REFERENCE
   Location of skills: ~/.claude/skills/
-  Last updated: 2026-06-24 (added course-prep orchestrator skill: folder + objectives → study guide + Anki + spaced reviews + quiz)
+  Last updated: 2026-06-25 (added filtered-deck skill + Doc:: tag axis)
 ================================================================================
 
 This file is your cheat sheet for medical school skills only.
@@ -24,6 +24,9 @@ SKILL OVERVIEW (what you have right now)
   7. syllabus-to-calendar      — Syllabus PDF/image/text → bulk Google Calendar events
   8. course-prep               — Course folder + objectives list → study guide + Anki
                                  deck + spaced reviews + active-recall quiz (orchestrator)
+  9. filtered-deck             — Drill a slice of MedSchool via a filtered deck (one doc,
+                                 system, yield tier, or exam); auto-tags Doc:: axis, gives
+                                 3-click manual create + one-click Rebuild instructions
 
   DAILY TOOLS (in Claude_Daily — see README.md there for full docs)
   -  morning-briefing         — Daily market/finance briefing → MP3 (auto 8am)
@@ -559,6 +562,58 @@ NOTES
   - Confirms before any calendar write.
   - Grounds content in the provided materials; supplements are flagged, never faked.
   - Study guide stays in the course folder so per-course material lives together.
+
+================================================================================
+9. FILTERED DECK BUILDER
+================================================================================
+
+WHAT IT DOES
+  Drills a precise slice of the single MedSchool home deck — one document,
+  one system, one yield tier, or one exam — using an Anki filtered (dynamic)
+  deck, without breaking the one-home-deck + tags architecture.
+
+  Because AnkiConnect has no action to create filtered decks, the skill does
+  the automatable parts and teaches the one 3-click manual step:
+    1. Resolves the user's request to the correct Anki search string.
+    2. Auto-applies a `Doc::<name>` tag via AnkiConnect addTags if missing.
+    3. Gives the user the exact search string + click-by-click instructions
+       to create the filtered deck (Tools -> Create Filtered Deck...) and
+       rebuild it on demand with one click.
+
+  The Doc:: tag axis (7th axis, added 2026-06-25) is the key tool here:
+    Doc::<document_name>  — underscores for spaces, e.g. Doc::Basic_Anatomical_Terminology
+  It lets you isolate every card from a single source document for targeted drilling.
+
+HOW TO TRIGGER
+  "filtered deck"
+  "filter deck"
+  "make a deck for just X"
+  "drill only X"
+  "study just X"
+  "test me on <document/topic>"
+  Any request to isolate a subset of MedSchool cards to review
+
+TAG SCHEMA (7 axes — all used to target filtered decks)
+  Course::<code>        e.g. Course::OST510
+  System::<system>      e.g. System::Anatomy
+  Source::<material>    e.g. Source::FACts
+  Yield::High|Mid|Low
+  Boards::<section>     e.g. Boards::Anatomy
+  Exam::<id>            e.g. Exam::2026-07-16
+  Doc::<document_name>  e.g. Doc::Basic_Anatomical_Terminology  ← NEW (2026-06-25)
+
+FILTERED DECK CREATION (3-click manual — AnkiConnect limitation)
+  In Anki: Tools -> Create Filtered Deck...
+    Name:   Drill: <Topic>
+    Search: tag:Doc::<name>   (or any search string)
+    Build.  Done.
+  Rebuild: click the filtered deck -> Rebuild to re-pull current matching cards.
+  Empty:   returns all cards to MedSchool without studying.
+
+NOTES
+  - Cards return to MedSchool automatically after the filtered deck is emptied.
+  - A card can only live in one filtered deck at a time; suspended cards excluded.
+  - Never manually move cards between decks — always use tags + filtered decks.
 
 ================================================================================
 OUTPUT FOLDER MAP
