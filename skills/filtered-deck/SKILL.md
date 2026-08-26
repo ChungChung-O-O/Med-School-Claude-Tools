@@ -1,6 +1,6 @@
 ---
 name: filtered-deck
-description: Use this skill when the user wants to study or test only a SLICE of their single MedSchool Anki home deck — one document, system, yield level, or exam — rather than the whole deck. Creates an Anki filtered (dynamic) deck driven by the tag schema. Because AnkiConnect cannot create filtered decks, this skill auto-applies the precise targeting tag and then walks the user through the one-time creation + one-click rebuild. Trigger on "filtered deck", "filter deck", "make a deck for just X", "drill only X", "study just X", "test me on <document/topic>", or when the user wants to isolate a subset of cards to review.
+description: 'Create a filtered Anki study deck for one document, topic, system, yield level, or exam within the MedSchool home deck. Trigger when the user asks for a filtered deck or wants to drill only a specific slice of cards.'
 ---
 
 # Filtered Deck Builder

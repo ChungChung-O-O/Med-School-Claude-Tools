@@ -1,6 +1,6 @@
 ---
 name: specific-paper-reader
-description: Use this skill when the user provides a specific paper to analyze — via PubMed ID (e.g., "PMID: 12345678"), a URL to a paper, or by uploading/pasting the paper text. Generates a clinical expert summary as a PDF with related reading recommendations. Trigger on any PMID, DOI, journal URL, or pasted abstract the user wants analyzed, even if they just say "can you summarize this paper for me" and paste text.
+description: 'Analyze a specific scientific paper provided by PMID, DOI, journal URL, uploaded file, abstract, or pasted text. Produce a clinical expert summary with related reading recommendations.'
 ---
 
 # Specific Paper Reader
@@ -127,7 +127,7 @@ After composing the summary, generate a PDF using the bundled script. This avoid
 **Step 6b: Run the bundled script:**
 
 ```bash
-python3 ~/.claude/skills/specific-paper-reader/scripts/generate_pdf.py /tmp/paperreview_input.json
+python3 ~/.agents/skills/specific-paper-reader/scripts/generate_pdf.py /tmp/paperreview_input.json
 ```
 
 If fpdf2 is not installed, run `pip3 install fpdf2` first and retry.

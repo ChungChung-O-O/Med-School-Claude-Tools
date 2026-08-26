@@ -46,7 +46,8 @@ Input JSON schema:
 import json
 import os
 import sys
-from datetime import date
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 try:
     from fpdf import FPDF
@@ -71,7 +72,7 @@ class PaperPDF(FPDF):
         self.set_y(-15)
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(150, 150, 150)
-        self.cell(0, 10, f"Page {self.page_no()}  |  Generated {date.today()}  |  For clinical education purposes only", align="C")
+        self.cell(0, 10, f"Page {self.page_no()}  |  Generated {datetime.now(ZoneInfo('America/Detroit')).date()}  |  For clinical education purposes only", align="C")
 
 
 def section(pdf, title, body):

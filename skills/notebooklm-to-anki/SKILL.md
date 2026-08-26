@@ -203,7 +203,7 @@ After generating all card data, write a JSON file and run the bundled script. Th
 {
   "deck": "MedSchool",
   "topic_slug": "HeartFailure",
-  "output_path": "~/Desktop/Claude Code/Claude_For_School/Anki/Anki_HeartFailure_YYYY-MM-DD.apkg",
+  "output_path": "~/Desktop/Agent/Claude_For_School/Anki/Anki_HeartFailure_YYYY-MM-DD.apkg",
   "cards": [
     {
       "type": "basic",
@@ -225,7 +225,7 @@ After generating all card data, write a JSON file and run the bundled script. Th
 **Step 2: Run the bundled script:**
 
 ```bash
-python3 ~/.claude/skills/notebooklm-to-anki/scripts/generate_apkg.py /tmp/anki_input.json
+python3 ~/.agents/skills/notebooklm-to-anki/scripts/generate_apkg.py /tmp/anki_input.json
 ```
 
 If genanki is not installed, run `pip3 install genanki` first and retry.

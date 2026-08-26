@@ -34,7 +34,10 @@ Input JSON schema:
 import json
 import os
 import sys
-from datetime import date
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+W = 174  # usable body width
 
 try:
     from fpdf import FPDF
@@ -57,17 +60,19 @@ class PaperPDF(FPDF):
         self.set_y(-15)
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(150, 150, 150)
-        self.cell(0, 10, f"Page {self.page_no()} — Generated {date.today()}", align="C")
+        self.cell(0, 10, f"Page {self.page_no()} | Generated {datetime.now(ZoneInfo('America/Detroit')).date()}", align="C")
 
 
 def section(pdf, title, body):
     pdf.set_font("Helvetica", "B", 11)
     pdf.set_text_color(30, 60, 120)
-    pdf.cell(0, 7, title)
+    pdf.set_x(18)
+    pdf.cell(W, 7, title)
     pdf.ln(5)
     pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(30, 30, 30)
-    pdf.multi_cell(0, 6, body)
+    pdf.set_x(18)
+    pdf.multi_cell(W, 6, body)
     pdf.ln(5)
 
 
@@ -107,21 +112,26 @@ def generate(data: dict):
     # Framing line
     pdf.set_font("Helvetica", "I", 10)
     pdf.set_text_color(60, 60, 60)
-    pdf.multi_cell(0, 6, data["framing_line"])
+    pdf.set_x(18)
+    pdf.multi_cell(W, 6, data["framing_line"])
     pdf.ln(6)
 
     # Paper title
     pdf.set_font("Helvetica", "B", 13)
     pdf.set_text_color(20, 20, 20)
-    pdf.multi_cell(0, 7, data["title"])
+    pdf.set_x(18)
+    pdf.multi_cell(W, 7, data["title"])
     pdf.ln(3)
 
     # Authors / Journal / DOI
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(80, 80, 80)
-    pdf.multi_cell(0, 5, f"Authors: {data['authors_first']}, ..., {data['authors_last']}")
-    pdf.multi_cell(0, 5, f"Journal: {data['journal']}  |  Year: {data['year']}  |  DOI: {data['doi']}")
-    pdf.multi_cell(0, 5, f"Impact: {data['citations']} citations  |  IF: {data['impact_factor']}")
+    pdf.set_x(18)
+    pdf.multi_cell(W, 5, f"Authors: {data['authors_first']}, ..., {data['authors_last']}")
+    pdf.set_x(18)
+    pdf.multi_cell(W, 5, f"Journal: {data['journal']}  |  Year: {data['year']}  |  DOI: {data['doi']}")
+    pdf.set_x(18)
+    pdf.multi_cell(W, 5, f"Impact: {data['citations']} citations  |  IF: {data['impact_factor']}")
     pdf.ln(6)
 
     pdf.set_draw_color(200, 200, 200)
@@ -140,7 +150,8 @@ def generate(data: dict):
     pdf.ln(4)
     pdf.set_font("Helvetica", "I", 8)
     pdf.set_text_color(130, 130, 130)
-    pdf.multi_cell(0, 5, f"Sources: {data['sources_note']}")
+    pdf.set_x(18)
+    pdf.multi_cell(W, 5, f"Sources: {data['sources_note']}")
 
     outpath = os.path.expanduser(data["output_path"])
     os.makedirs(os.path.dirname(outpath), exist_ok=True)

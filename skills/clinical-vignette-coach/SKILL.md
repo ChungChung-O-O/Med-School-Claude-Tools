@@ -1,11 +1,11 @@
 ---
 name: clinical-vignette-coach
-description: Use this skill when the user wants to work through a clinical vignette using structured reasoning (H&P → DDx → Workup → Management). Accepts pasted, user-written, or Claude-generated vignettes. Conducts a Socratic dialogue — guides the user toward gaps before revealing answers. Saves session logs to CaseReview folder. Trigger when the user says "coach me on this vignette", "clinical coach:", "let's do a case", "vignette:", "practice case", or pastes a clinical case and wants to work through it. Also trigger when user asks to "generate a case" on a clinical topic.
+description: Use this skill when the user wants to work through a clinical vignette using structured reasoning (H&P → DDx → Workup → Management). Accepts pasted, user-written, or Agent-generated vignettes. Conducts a Socratic dialogue — guides the user toward gaps before revealing answers. Saves session logs to CaseReview folder. Trigger when the user says "coach me on this vignette", "clinical coach:", "let's do a case", "vignette:", "practice case", or pastes a clinical case and wants to work through it. Also trigger when user asks to "generate a case" on a clinical topic.
 ---
 
 # Clinical Vignette Coach
 
-A Socratic clinical reasoning tutor. The user submits a vignette and their reasoning chain; Claude guides them through their gaps via targeted questions before revealing a full analysis. Sessions are logged for pattern tracking over time.
+A Socratic clinical reasoning tutor. The user submits a vignette and their reasoning chain; Agent guides them through their gaps via targeted questions before revealing a full analysis. Sessions are logged for pattern tracking over time.
 
 ## When This Skill Applies
 
@@ -43,9 +43,9 @@ Determine how the vignette is being provided:
 |-------|--------|
 | Pasted vignette (from UWorld, Amboss, shelf, etc.) | Read directly |
 | User-written vignette | Read directly |
-| User asks Claude to generate one | Generate — see Vignette Generation below |
+| User asks Agent to generate one | Generate — see Vignette Generation below |
 
-If the user wants a Claude-generated vignette, ask:
+If the user wants a Agent-generated vignette, ask:
 - What topic or clinical domain? (e.g., "chest pain workup", "new-onset DM2")
 - Any specific learning objective? (e.g., "I'm weak on differentiating ACS vs PE")
 - Approximate difficulty level? (e.g., "straightforward", "tricky with a key pivot")
@@ -75,8 +75,8 @@ Do not proceed until the user answers. Never auto-assume based on vignette conte
 Ask:
 > "Do you have a source document to anchor this session against? (e.g., a NotebookLM .txt file, lecture notes, UpToDate export — you can provide the file path or paste the content)"
 
-- If yes: Read the source. Cross-check it against Claude's knowledge before starting. See Contradiction Handling below.
-- If no: Proceed with Claude's knowledge base. Note this clearly at the start of the session log.
+- If yes: Read the source. Cross-check it against Agent's knowledge before starting. See Contradiction Handling below.
+- If no: Proceed with Agent's knowledge base. Note this clearly at the start of the session log.
 
 ---
 
@@ -108,7 +108,7 @@ Map out:
 - What reasoning gap is most important to address first (highest yield)
 - 2–4 Socratic questions that would guide them toward the key gap without giving it away
 
-**Contradiction check:** If the source document and Claude's knowledge conflict on any point relevant to this case, do not silently choose one. Go to Contradiction Handling immediately.
+**Contradiction check:** If the source document and Agent's knowledge conflict on any point relevant to this case, do not silently choose one. Go to Contradiction Handling immediately.
 
 ---
 
@@ -148,7 +148,7 @@ CLINICAL VIGNETTE COACH — GAP ANALYSIS
 =======================================
 Exam context: [STEP/COMLEX level]
 Topic: [clinical topic]
-Source: [filename or "Claude knowledge base"]
+Source: [filename or "Agent knowledge base"]
 
 FRAMEWORK ADHERENCE
 -------------------
@@ -201,7 +201,7 @@ guidelines say, and how this was resolved]
 
 After delivering the gap analysis, save a session log as a `.md` file:
 
-**Location:** `/Users/austin_cheng/Desktop/Claude Code/Claude_For_School/CaseReview/`
+**Location:** `/Users/austin_cheng/Desktop/Agent/Claude_For_School/CaseReview/`
 **Filename:** `CaseReview_<TopicSlug>_<YYYY-MM-DD>.md`
 
 If a file with the same topic slug already exists for the same date, append `_v2`, `_v3`, etc.
@@ -210,8 +210,8 @@ If a file with the same topic slug already exists for the same date, append `_v2
 # Case Review: [Topic] — [YYYY-MM-DD]
 
 **Exam Context:** [STEP/COMLEX level]
-**Vignette Source:** [pasted from question bank / user-written / Claude-generated]
-**Source Document:** [filename or "Claude knowledge base"]
+**Vignette Source:** [pasted from question bank / user-written / Agent-generated]
+**Source Document:** [filename or "Agent knowledge base"]
 **Session outcome:** [Resolved independently / Resolved with hints / Answer revealed on request]
 
 ---
@@ -275,14 +275,14 @@ After saving, confirm the file path to the user and add:
 
 ## Contradiction Handling
 
-When a conflict is detected between a source document and Claude's knowledge:
+When a conflict is detected between a source document and Agent's knowledge:
 
 1. **Stop immediately** — do not silently choose one source over the other.
 2. **Surface it explicitly:**
 
 > "I noticed a potential discrepancy before we proceed:
 > - Your source document states: [quote or paraphrase]
-> - Standard clinical knowledge (per my training) says: [what Claude knows]
+> - Standard clinical knowledge (per my training) says: [what Agent knows]
 >
 > This could be due to [possible reason: different guideline version, institution-specific protocol, recent update, etc.].
 > How would you like to handle this? Options:
@@ -295,7 +295,7 @@ When a conflict is detected between a source document and Claude's knowledge:
 
 ---
 
-## Vignette Generation (when user requests a Claude-generated case)
+## Vignette Generation (when user requests a Agent-generated case)
 
 Generate vignettes in standard USMLE format:
 
@@ -336,10 +336,10 @@ After saving the session log, offer the user two optional actions:
 If the user wants to add the 3 key learning points as Anki cards:
 1. Check Anki-Connect MCP availability (attempt `getDeckNames` or equivalent tool).
 2. If Anki is running:
-   - Create/use deck `Claude::CaseReview`
+   - Create/use deck `MedSchool::CaseReview`
    - Add one Basic card per learning point: Front = clinical question derived from the point, Back = the answer/takeaway, Extra = case context (topic + date)
    - Tag each card: `CaseReview`, relevant organ system (e.g., `Cardiology`), exam level (e.g., `Step2`)
-   - Confirm to user: "X cards added directly to Anki under Claude::CaseReview."
+   - Confirm to user: "X cards added directly to Anki under MedSchool::CaseReview."
 3. If Anki is not running: tell user to open Anki and ask again, or offer to include cards in the session log for manual entry later.
 
 ### Option B: Schedule a Review Session in Apple Calendar

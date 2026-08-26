@@ -1,12 +1,13 @@
 ================================================================================
-  CLAUDE CODE SKILLS — MED SCHOOL QUICK REFERENCE
-  Location of skills: ~/.claude/skills/
-  Last updated: 2026-06-25 (notebooklm-to-anki now auto-tags Doc:: axis)
+  AGENT SKILLS — MED SCHOOL QUICK REFERENCE
+  Live Agent skills: ~/.agents/skills/
+  Claude transition copies (through 2026-09-01): ~/.claude/skills/
+  Last updated: 2026-08-26 (Agent migration validated; live and backup skills synchronized)
 ================================================================================
 
 This file is your cheat sheet for medical school skills only.
 For daily life tools (morning briefing, Telegram secretary bot), see:
-  ~/Desktop/Claude Code/Claude_Daily/README.md
+  ~/Desktop/Agent/Claude_Daily/README.md
 
 Update this file whenever a med school skill is added or changed.
 
@@ -50,7 +51,7 @@ WHAT IT DOES
   summary to a PDF on your Desktop.
 
 HOW TO TRIGGER
-  Just type this in Claude Code:
+  Just type this in Agent:
 
     "Topic for today: <keyword1>, <keyword2>, and <keyword3>"
 
@@ -120,7 +121,7 @@ WHAT YOU GET
 ZOTERO INTEGRATION (OPT-IN)
   After saving the PDF, Claude asks: "Save to Zotero? [y/N]"
   Say y to add the paper (title, authors, journal, DOI, PMID) to your Zotero library.
-  Credentials stored at: ~/Desktop/Claude Code/Claude_For_School/config/zotero_config.json
+  Credentials stored at: ~/Desktop/Agent/Claude_For_School/config/zotero_config.json
 
 DIFFERENCE FROM HOT PAPER READER
   Hot Paper Reader = you give keywords, it FINDS the paper for you
@@ -170,7 +171,7 @@ AUTO-DETECTED SCHEMAS
 
 WHAT YOU GET
   .txt file saved to:
-    ~/Desktop/Claude Code/Claude_For_School/NotebookLM/
+    ~/Desktop/Agent/Claude_For_School/NotebookLM/
 
   Naming:
     Research article:  NLM_PICO_<AuthorLastName>_<Year>_<Date>.txt
@@ -224,7 +225,7 @@ SCHEMA AUTO-DETECTION
 
 WHAT YOU GET
   .md file saved to:
-    ~/Desktop/Claude Code/Claude_For_School/NotebookLM/
+    ~/Desktop/Agent/Claude_For_School/NotebookLM/
 
   Naming:
     Step 1 lecture:  NLM_Lec_Step1_<topic_slug>_<Date>.md
@@ -279,7 +280,7 @@ HOW TO TRIGGER
   "generate cards from: <source>"
 
   Source can be:
-    - A .txt file:    "make anki cards from: /Desktop/Claude Code/Claude_For_School/NotebookLM/NLM_PICO_Smith_2024_2026-03-05.txt"
+    - A .txt file:    "make anki cards from: /Desktop/Agent/Claude_For_School/NotebookLM/NLM_PICO_Smith_2024_2026-03-05.txt"
     - A .pdf file:    "anki: /path/to/lecture_notes.pdf"
     - A .mp3 file:    "anki: /path/to/notebooklm_audio.mp3"  (requires Whisper — see below)
     - Pasted text:    Paste a NotebookLM study guide and ask for cards
@@ -320,7 +321,7 @@ CARD TYPE LOGIC (auto-detected per fact)
 
 WHAT YOU GET
   .apkg file saved to (Path B fallback only):
-    ~/Desktop/Claude Code/Claude_For_School/Anki/
+    ~/Desktop/Agent/Claude_For_School/Anki/
 
   Naming:   Anki_<TopicSlug>_<Date>.apkg
   Deck name in Anki: MedSchool
@@ -417,7 +418,7 @@ CONTRADICTION HANDLING (strict — no hallucination)
 WHAT YOU GET
   Chat-based gap analysis (in-session)
   Session log saved to:
-    ~/Desktop/Claude Code/Claude_For_School/CaseReview/
+    ~/Desktop/Agent/Claude_For_School/CaseReview/
   Naming: CaseReview_<TopicSlug>_<Date>.md
 
   Log contains: vignette, your reasoning, full Socratic exchange,
@@ -487,7 +488,7 @@ WHAT IT DOES
   orientation item found. Shows a preview table before creating anything.
 
 HOW TO TRIGGER
-  Type any of these in Claude Code:
+  Type any of these in Agent:
 
     /syllabus
     syllabus: /path/to/syllabus.pdf
@@ -565,7 +566,7 @@ PIPELINE
   1. Blueprint — Opus enumerates everything that must be covered
   2. Study guide — Sonnet drafts it from the sources (flags any (supp) fill-ins)
   3. Verify — Opus checks every blueprint item + spot-checks accuracy
-  4. Anki — Opus blueprints cards, Sonnet builds the .apkg (notebooklm-to-anki rules);
+  4. Anki — Agent blueprints and builds the .apkg (notebooklm-to-anki rules);
             all cards go into the single "MedSchool" deck with the 7-axis tag schema
             (Course/System/Source/Yield/Boards/Doc/Exam); auto-imported via AnkiConnect;
             "Undergrad MCAT (Austin)" deck is never touched.
@@ -641,9 +642,59 @@ OUTPUT FOLDER MAP
 ================================================================================
 
   PDFs (paper summaries):     ~/Desktop/
-  NotebookLM source files:    ~/Desktop/Claude Code/Claude_For_School/NotebookLM/
-  Anki decks:                 ~/Desktop/Claude Code/Claude_For_School/Anki/
-  Case review logs:           ~/Desktop/Claude Code/Claude_For_School/CaseReview/
-  Zotero credentials:         ~/Desktop/Claude Code/Claude_For_School/config/zotero_config.json
+  NotebookLM source files:    ~/Desktop/Agent/Claude_For_School/NotebookLM/
+  Anki decks:                 ~/Desktop/Agent/Claude_For_School/Anki/
+  Case review logs:           ~/Desktop/Agent/Claude_For_School/CaseReview/
+  Zotero credentials:         ~/Desktop/Agent/Claude_For_School/config/zotero_config.json
 
 ================================================================================
+
+================================================================================
+DECK HYGIENE — reorg_2026_08_18.py  (Anki/reorg_2026_08_18.py)
+================================================================================
+
+WHAT IT DOES
+  One-off maintenance run on 2026-08-18 that archived the finished OST 510
+  anatomy course out of the active MedSchool tree.
+
+  Before: 3,461 cards, 1,719 due, of which 3,115 were anatomy for a course
+          already examined. Anki sessions were taking 90-120 min.
+  After:  MedSchool tree = 0 due. Archive tree serves ~49/day (20 review cap
+          + learning-queue drain). Nothing deleted, nothing unsuspended.
+
+  1. Moved MedSchool::Anatomy::* + the parked-duplicates deck to a top-level
+     "Archive (OST 510)" tree. Top-level matters: Johnny's morning-briefing
+     focus count matches on the substring "MedSchool", so anything outside that
+     tree stops being reported.
+  2. Suspended the 320 still-NEW archived cards (queued for exams already sat).
+  3. Assigned preset "Archive trickle (20 rev/day)": 0 new/day, 20 review/day,
+     so anatomy trickles for OST 521 / boards instead of flooding.
+  4. Suspended all 346 Undergrad MCAT cards.
+  5. Created MedSchool::OST520 with preset "OST520 (20 new / 200 rev)":
+     20 new/day, 200 review/day, leech at 4 lapses -> suspend, bury siblings.
+
+WHY 20 NEW/DAY
+  Daily reviews settle at roughly 8-12x the daily new-card count. At 150
+  new/day that is 1,300+ reviews/day, which is what produced the 90-120 min
+  sessions. 45 min / (55s per new card incl. same-day repeats + 8.5 reviews
+  x 10s) ~= 20 new/day. Over the 47-day course that is ~940 cards, ~10 per
+  lecture, so Anki must be SELECTIVE for OST 520, not comprehensive.
+
+HOW TO RUN
+  Anki must be OPEN on the host (AnkiConnect on :8765).
+    python3 reorg_2026_08_18.py                  # dry run, default
+    python3 reorg_2026_08_18.py --commit
+    python3 reorg_2026_08_18.py --host <ip> --commit
+
+SAFETY
+  Never deletes a card, note, or deck, and never unsuspends. AnkiConnect's
+  deleteDecks takes cards with it, so emptied MedSchool::Anatomy shells are
+  left for manual GUI deletion (safe at 0 cards). Verifies afterwards that the
+  collection card count is unchanged.
+
+CANNOT BE AUTOMATED (AnkiConnect deck-config API predates these)
+  FSRS toggle + desired retention 0.90 -> set by hand in Deck options.
+
+NOTE ON THE PROBE
+  curl without "Content-Type: application/json" gets an empty reply from
+  AnkiConnect and looks offline. Always probe with the header set.

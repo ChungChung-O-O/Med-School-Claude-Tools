@@ -1,6 +1,6 @@
 ---
 name: hot-paper-reader
-description: Use this skill when the user says "Topic for today: <keyword1>, <keyword2>, and <keyword3>", asks to "find a hot paper on [topics]", wants to "summarize a recent paper about [topics]", or provides three research keywords to search scientific literature. Trigger even if the user phrases it casually, e.g. "find me a paper on X, Y, Z" or "what's a good recent paper about CRISPR, cancer, and immunotherapy".
+description: 'Find and summarize a recent high-impact scientific paper at the intersection of user-provided research topics. Trigger for hot-paper searches, recent-paper recommendations, or three-keyword literature requests.'
 ---
 
 # Hot Paper Reader
@@ -20,7 +20,7 @@ Activate when the user provides three research keywords using the pattern "Topic
 ## Known MCP Limitations
 
 **PubMed MCP (pubmed via https://pubmed.mcp.claude.com/mcp):**
-- Uses stateful HTTP sessions that expire mid-conversation. Deep multi-step searches work best at the start of a fresh Claude Code session. If session errors appear ("Session not found"), delegate the full search to a subagent (Agent tool) which initializes its own session — this reliably works around the expiry.
+- Uses stateful HTTP sessions that expire mid-conversation. Deep multi-step searches work best at the start of a fresh Agent session. If session errors appear ("Session not found"), delegate the full search to a subagent (Agent tool) which initializes its own session — this reliably works around the expiry.
 
 **bioRxiv MCP (biorxiv via https://mcp.deepsense.ai/biorxiv/mcp):**
 - The configured endpoint may return HTTP 301 redirects to documentation pages and reject direct POST requests without OAuth. If this occurs, the subagent should fall back to Europe PMC's preprint index and PubMed's cross-indexing of bioRxiv papers for coverage.
@@ -106,7 +106,7 @@ After composing the summary, generate a PDF using the bundled script. This avoid
 **Step 6b: Run the bundled script:**
 
 ```bash
-python3 ~/.claude/skills/hot-paper-reader/scripts/generate_pdf.py /tmp/hotpaper_input.json
+python3 ~/.agents/skills/hot-paper-reader/scripts/generate_pdf.py /tmp/hotpaper_input.json
 ```
 
 If fpdf2 is not installed, run `pip3 install fpdf2` first and retry.

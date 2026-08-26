@@ -9,7 +9,7 @@ Input JSON schema:
 {
   "deck": "MedSchool",
   "topic_slug": "HeartFailure",
-  "output_path": "~/Desktop/Claude Code/Claude_For_School/Anki/Anki_HeartFailure_2024-01-01.apkg",
+  "output_path": "~/Desktop/Agent/Claude_For_School/Anki/Anki_HeartFailure_2024-01-01.apkg",
   "cards": [
     {
       "type": "basic",

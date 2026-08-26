@@ -1,7 +1,6 @@
 ---
 name: syllabus-to-calendar
 description: Use this skill when the user wants to parse a course syllabus (PDF, image, or pasted text) and bulk-create Google Calendar events from it. Extracts lectures, labs, exams, deadlines, and orientations, shows a preview, then creates all events after confirmation.
-version: 1.0.0
 ---
 
 # Syllabus to Calendar
@@ -32,8 +31,8 @@ If the user provided a file path, read it:
 Read the file at the provided path.
 ```
 
-- **PDF**: Use the Read tool — Claude can read PDFs directly with vision.
-- **Image**: Use the Read tool — Claude can see images.
+- **PDF**: Use the Read tool — Agent can read PDFs directly with vision.
+- **Image**: Use the Read tool — Agent can see images.
 - **Pasted text**: Process it directly.
 
 If no input is provided, ask:

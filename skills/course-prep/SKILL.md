@@ -1,7 +1,6 @@
 ---
 name: course-prep
-description: Use this skill when Austin points at a folder of course materials (slides/docs/PDFs) plus an objectives or "FACts"/learning-goals list and wants it turned into a complete study pack — an objective-by-objective study guide, an Anki deck, scheduled spaced reviews, and an active-recall quiz. Trigger when he says "course prep:", "prep this folder", "prep this course", "make a study pack from this folder", "FACts prep", drops a course folder path, or asks to "get me ready for the <X> quiz/exam" given a materials folder. This is the orchestrator that chains lecture-to-notebooklm, notebooklm-to-anki, clinical-vignette-coach, and spaced-review scheduling.
-version: 1.0.0
+description: Use this skill when Austin points at a folder of course materials (slides/docs/PDFs) plus an objectives or "FACts"/learning-goals list and wants it turned into a complete study pack — an objective-by-objective study guide, an Anki deck, scheduled spaced reviews, and an active-recall quiz. Trigger when he says "course prep:", "prep this folder", "prep this course", "make a study pack from this folder", "FACts prep", drops a course folder path, or asks to "get me ready for the named quiz or exam" given a materials folder. This is the orchestrator that chains lecture-to-notebooklm, notebooklm-to-anki, clinical-vignette-coach, and spaced-review scheduling.
 ---
 
 # Course Prep — Folder → Study Pack
@@ -71,14 +70,14 @@ Read the guide. Confirm every blueprint item is covered (walk the checklist). Sp
 ## Phase 4 — Anki deck (Opus blueprint + Sonnet hand)
 
 1. Opus writes a **card coverage blueprint**: which terms/concepts become cards, which are Q&A vs cloze (cloze for sequences/mechanisms; Q&A for term→definition).
-2. Spawn Sonnet to draft the cards and build the `.apkg` following the **notebooklm-to-anki** skill's rules (card quality, 6-axis tag schema, bundled `generate_apkg.py` script). Output to `~/Desktop/Claude Code/Claude_For_School/Anki/Anki_<CourseTag>_<YYYY-MM-DD>.apkg`.
+2. Spawn Sonnet to draft the cards and build the `.apkg` following the **notebooklm-to-anki** skill's rules (card quality, 6-axis tag schema, bundled `generate_apkg.py` script). Output to `~/Desktop/Agent/Claude_For_School/Anki/Anki_<CourseTag>_<YYYY-MM-DD>.apkg`.
 
    **Canonical organization (non-negotiable):**
    - All cards go into the **`MedSchool`** home deck. Never create per-lecture or per-date subdecks. Never touch `Undergrad MCAT (Austin)`.
    - Tags use the 6-axis schema: `Course::<code>`, `System::<system>`, `Source::<material>`, `Yield::High|Mid|Low`, `Boards::<section>`, and optionally `Exam::<id>`.
    - Auto-import via AnkiConnect (localhost:8765) is the default. If Anki is closed, fall back to .apkg with deck name `MedSchool`.
 
-3. Opus verifies: file exists, non-zero, card count sane, blueprint covered, no old-style `Claude::` deck names or `FirstAid::` tags present.
+3. Agent verifies: file exists, non-zero, card count sane, blueprint covered, no old-style `Claude::` deck names or `FirstAid::` tags present.
 
 ## Phase 4b — Mark sources processed (Opus)
 
@@ -109,7 +108,7 @@ Offer to quiz him on the objectives now:
 | Artifact | Location |
 |---|---|
 | Study guide (`.md`) | `<course-folder>/_outputs/` (kept out of `_inbox/` so it is never re-read as a source) |
-| Anki deck (`.apkg`) | `~/Desktop/Claude Code/Claude_For_School/Anki/` (canonical) |
+| Anki deck (`.apkg`) | `~/Desktop/Agent/Claude_For_School/Anki/` (canonical) |
 | Processed source files | `<course-folder>/_processed/` (moved out of `_inbox/` after a successful run) |
 | Quiz/review events | Medical School Google Calendar |
 | Any case logs (if vignette-coach used) | `Claude_For_School/CaseReview/` |
