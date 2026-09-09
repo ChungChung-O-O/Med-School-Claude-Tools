@@ -2,7 +2,7 @@
   AGENT SKILLS — MED SCHOOL QUICK REFERENCE
   Live Agent skills: ~/.agents/skills/
   Claude transition copies (through 2026-09-01): ~/.claude/skills/
-  Last updated: 2026-08-26 (Agent migration validated; live and backup skills synchronized)
+  Last updated: 2026-09-09 (missed-question-generator backup and documentation added)
 ================================================================================
 
 This file is your cheat sheet for medical school skills only.
@@ -28,6 +28,9 @@ SKILL OVERVIEW (what you have right now)
   9. filtered-deck             — Drill a slice of MedSchool via a filtered deck (one doc,
                                  system, yield tier, or exam); auto-tags Doc:: axis, gives
                                  3-click manual create + one-click Rebuild instructions
+ 10. missed-question-generator - Turn wrong or guessed question-bank items into new,
+                                 source-grounded transfer questions with an explanation
+                                 for every answer option
 
   DAILY TOOLS (in Claude_Daily — see README.md there for full docs)
   -  morning-briefing         — Daily market/finance briefing → MP3 (auto 8am)
@@ -636,6 +639,83 @@ NOTES
   - Cards return to MedSchool automatically after the filtered deck is emptied.
   - A card can only live in one filtered deck at a time; suspended cards excluded.
   - Never manually move cards between decks — always use tags + filtered decks.
+
+================================================================================
+10. MISSED QUESTION GENERATOR
+================================================================================
+
+WHAT IT DOES
+  Turns question-bank misses into fresh transfer questions that test the same
+  weak concept from a new angle. It accepts an OST 520 analysis export, explicit
+  question IDs, or a written/screenshot description of a miss. Each candidate
+  contains a concise teaching rationale plus one aligned explanation for every
+  answer option, so review explains both the key and the distractors.
+
+  The skill also distinguishes a true content weakness from a defective original
+  question. Thin or unsupported original rationales are staged for repair instead
+  of being hidden behind a new question.
+
+HOW TO TRIGGER
+  "generate the missed questions"
+  "generate the missed question"
+  "make new questions from what I got wrong"
+  "add practice for my misses"
+  You can paste the bank's "Copy analysis for Claude/Codex" text, list stable
+  question IDs, or describe the concepts that felt uncomfortable.
+
+WHAT YOU GET
+  A staged JSON batch in the active course/question-bank workspace. Drafting does
+  not modify the live bank. After validation and review, approved items can be
+  appended through the question bank's guarded, idempotent ingest workflow.
+
+  No learner-facing Markdown reading file is produced. The teaching appears in
+  the question bank's rationale and per-option explanation panel.
+
+CONFIGURATION AND DATA CONTRACT
+  - Stable IDs: MQG-<source-or-objective>-<two-digit-sequence>
+  - Source tag: missed-remediation
+  - OST 520 questions use five choices and zero-based answer indices.
+  - optionExplanations is five plain strings aligned with the original options.
+  - derivedFrom links a variant to released question IDs; a user-described gap
+    can use missDescription instead.
+  - sourceRef records the source document plus a page, slide, section, or
+    transcript timestamp.
+  - sourceBlock identifies the controlling lecture/reading block. Unit 2
+    variants inherit it from the parent so taught-date and daily routing remain
+    correct; objective tags do not substitute for it.
+  - Detailed contract:
+      skills/missed-question-generator/references/ost520-contract.md
+
+DEPENDENCIES
+  - Node.js for scripts/validate_batch.js
+  - Current released question-bank JSON
+  - Primary course sources and objectives
+  - Media-gated and other staged collections for collision checks
+  - Private holdout inventory before any release
+
+WORKFLOW
+  1. Resolve the exported misses or supplied IDs against the released bank.
+  2. Read the matching objectives and primary source locations.
+  3. Draft a new-angle transfer item with five plausible options and one
+     source-grounded explanation per option.
+  4. Stage the batch outside index.html, bank.json, and release files.
+  5. Run validate_batch.js against the released bank, media-gated/staged
+     references, and private holdouts. An unavailable holdout inventory blocks
+     release but does not prevent staging.
+  6. Verify every key and distractor explanation manually. The similarity screen
+     supplements this review; it does not replace semantic duplicate checking.
+  7. For large batches, Sol owns the plan and final review, Terra may perform
+     bounded drafting/mechanical work, and Astra independently gates quality,
+     source support, cues, duplication, privacy, and integration behavior.
+  8. Integrate by append-only stable IDs, regenerate derived bank copies, run the
+     repository tests and quality audit, simulate a public clone, and verify the
+     learner-facing deployment when publishing is in scope.
+
+PRIVACY AND PROGRESS SAFETY
+  Private first-use holdouts are comparison-only material. Their stems, answers,
+  rationales, and distinctive presentations must never enter learner-facing files
+  or validation output. Existing IDs are never renumbered, reused, or silently
+  replaced, which preserves browser progress and compatible backups.
 
 ================================================================================
 OUTPUT FOLDER MAP
