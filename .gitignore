@@ -2,6 +2,8 @@
 NotebookLM/
 Anki/
 CaseReview/
+# Generated private local transcript captures
+Transcripts/
 
 # Binary and audio files
 *.apkg
