@@ -31,6 +31,9 @@ SKILL OVERVIEW (what you have right now)
  10. missed-question-generator - Turn wrong or guessed question-bank items into new,
                                  source-grounded transfer questions with an explanation
                                  for every answer option
+ 11. live-lecture-to-qbank     - Import a newly posted live-lecture transcript, preserve
+                                 its versioned provenance, and stage only reviewed question
+                                 bank additions or repairs
 
   DAILY TOOLS (in Claude_Daily — see README.md there for full docs)
   -  morning-briefing         — Daily market/finance briefing → MP3 (auto 8am)
@@ -716,6 +719,54 @@ PRIVACY AND PROGRESS SAFETY
   rationales, and distinctive presentations must never enter learner-facing files
   or validation output. Existing IDs are never renumbered, reused, or silently
   replaced, which preserves browser progress and compatible backups.
+
+================================================================================
+11. LIVE LECTURE TO QBANK
+================================================================================
+
+WHAT IT DOES
+  Finds the selected new recording in the configured MediaSpace playlist using
+  the supported transcript panel/export flow, then imports its local export,
+  keeps the raw export and every content revision, and prepares a
+  narrowly scoped, source-located question-bank staging batch. It never watches
+  the playlist or changes the released bank by itself. The local helper never
+  downloads from the network after CUA has captured the export.
+
+HOW TO TRIGGER
+  Say "live lecture uploaded" or "import live lecture", then identify the
+  lecture and course/unit. A local `.txt`, `.vtt`, or `.srt` export can be
+  supplied directly. OST 520 starts from its configured MediaSpace playlist;
+  the selected recording's actual entry URL, title, recording date, and entry
+  ID must still be captured from the supported transcript panel/export flow.
+
+WHAT YOU GET
+  `~/Desktop/Agent/Claude_For_School/Transcripts/<course>/<unit>/index.json`
+  is the source-of-truth index. Each recording keeps its raw export and a
+  normalized, locator-preserving version under `lectures/<recording-id>/`.
+  Same content is skipped; a changed export is retained as a new version.
+  Caption exports use timestamps and plain text uses paragraph locators.
+
+QUESTION-BANK GUARDRAILS
+  Stage only additions or repairs supported by the new transcript and lecture
+  objectives. Do not regenerate the bank or rewrite existing IDs/history.
+  Preserve a reviewed daily set by default; an authorized transcript-based
+  revision replaces only affected items within the same 13-22 question budget
+  after actual daily routing is verified. Proposed items need source locators, causal-chain
+  reasoning, five aligned explanations, and plausible same-domain distractors;
+  roughly three quarters should be second-order. Terra performs authorized
+  execution and mass authoring. If Terra reaches a limit, checkpoint and resume
+  with Terra rather than shifting mass execution to Astra. Astra plans and verifies every key, source,
+  distractor, explanation, and scoped integration diff before the guarded bank
+  workflow accepts anything.
+
+CONFIGURATION AND DEPENDENCIES
+  The default output root can be changed with `--output-root`; source URL may
+  be overridden per import. Required metadata is lecture/source identity,
+  recording date, course/unit, and live versus prerecorded status. The importer
+  uses Python 3 standard library only. Its local helper is at
+  `skills/live-lecture-to-qbank/scripts/import_transcript.py`; it deliberately
+  does not scrape MediaSpace, guess API routes, access session credentials, or
+  download from the network after CUA captures the export.
 
 ================================================================================
 OUTPUT FOLDER MAP
