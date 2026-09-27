@@ -22,3 +22,6 @@ config/zotero_config.json
 
 # Claude Code local worktrees / settings — never track
 .claude/
+
+# Private question staging — never version
+Question_Bank_Staging/
